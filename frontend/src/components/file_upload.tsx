@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Toaster } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 
 export default function FileUploader() {
   const [files, setFiles] = useState<File[]>([]);
-  const [response, setResponse] = useState('');
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = (e) => {
@@ -13,6 +16,7 @@ export default function FileUploader() {
     e.preventDefault();
 
     if (files.length == 0) {
+      toast('Please select file(s)');
       return;
     }
 
@@ -23,16 +27,15 @@ export default function FileUploader() {
 
     try {
 
-      const res = await fetch('http://localhost:8000/upload', {
+      await fetch('http://localhost:8000/upload', {
         method: 'POST',
         body: formData
       });
 
-      const data = await res.json();
-      setResponse(JSON.stringify(data, null, 2));
+      toast('File successfully uploaded');
 
     } catch (err) {
-      setResponse('Error: ' + err.message);
+      toast('Error Uploading File: ' + err.message);
     } finally {
       setUploading(false);
     }
@@ -41,25 +44,19 @@ export default function FileUploader() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input
+        <Input
           type='file'
           multiple
           onChange={handleFileChange}
         />
-        <button
+        <Button
           type='submit'
           disabled={uploading}
         >
           {uploading ? 'Uploading...' : 'Upload'}
-        </button>
+        </Button>
+        <Toaster/>
       </form>
-
-      {response && (
-        <div>
-          <strong>Response:</strong>
-          <pre>{response}</pre>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Button } from './ui/button';
+import { Textarea } from './ui/textarea';
 
 export default function Query() {
     const [query, setInput] = useState('');
@@ -31,18 +33,18 @@ export default function Query() {
     return (
       <div>
       <form onSubmit={handleSubmit}>
-        <textarea
+        <Textarea
           rows={4}
           value={query}
           onChange={(e) => setInput(e.target.value)}
           placeholder='Type your message here...'
         />
-        <button
+        <Button
           type='submit'
           disabled={loading}
         >
           {loading ? 'Submitting...' : 'Submit'}
-        </button>
+        </Button>
       </form>
 
       {response && (
