@@ -1,0 +1,21 @@
+Linear regression is an algorithm that aims to find a line of best fit that fits a set of vectors in an n-dimensional vector space. Then the following equation for the line with the coefficients filled in is used to make predictions about the dataset:
+
+y=b_0 + b_1x_1 + b_2x_2 + b_3x_3 ...
+
+Each coefficient corresponds to one feature in the dataset, except for the intercept, which is a theoretical value that shows what y would be if all of the features were 0. 
+Training
+Firstly, the coefficients are initialized at 0 or a small random value and the equation is evaluated to find y for all of the entries in the dataset. Then, a loss function is applied to the predicted and the actual y values, such as mean squared error. This tells us how wrong the model was. After this, backpropagation is done in order to find the gradients of all of the coefficients with respect to the loss. 
+Backpropagation
+Firstly, the predicted and actual values are put into the derivative of the loss function, this will give the gradients of the loss function with respect to its input (the output of the model).
+
+Next, the gradient of the output of the model with respect to the coefficients (not including the intercept) is found. This would just be the input to the model:
+y=b_0 + b_1x_1 + b_2x_2 + b_3x_3 ...
+dy/db_1 = x_1
+dy/db_n = x_n
+The gradient of the intercept with respect to y would just be 1.
+
+After both the gradient of the loss function w.r.t y and the gradient of y w.r.t the coefficients are found, they can be multiplied to get the gradient of the loss with respect to the coefficients. This works because of the chain rule.
+
+After the gradient of the loss function with respect to the coefficients is found, they can just be put into an optimizing algorithm like Adam, or can just be subtracted from the corresponding coefficient after being scaled by the learning rate.
+
+After many epochs of this, the model will learn to fit the line that the dataset represents and will be able to make predictions about new data.

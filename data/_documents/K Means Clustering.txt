@@ -1,0 +1,5 @@
+K means is a clustering algorithm that is meant to find certain centroids in a dataset. The vectors in the dataset that are closest to a certain centroid will represent a cluster that is found in that dataset. This is very powerful for finding underlying trends in data where n main types of point may be present. Here's how it works
+
+The centroids are initialized as random points from the dataset or are initialized in more optimized ways. One such way is choosing one of the centroids randomly from the dataset and then creating a probability distribution of all of the other data points that is proportional to how far each point is from a chosen centroid. A centroid is selected from the probability distribution and the process continues until the desired amount of centroids are initialized.
+
+Next, the centroids are used on the dataset to make clusters, which are the points that that are closest to the corresponding centroid of the cluster. Then, the mean of the points in each cluster is taken and the centroid is set to that mean. This process continues until a the change in each centroid is less than a desired value or until a desired number of epochs is reached.
