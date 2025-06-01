@@ -1,11 +1,13 @@
-import QueryBox from "../components/QueryBox";
-import FileUploader from "../components/FileUploader";
+import React from 'react';
+
+import Query from '../components/query';
+import FileUploader from '../components/file_upload';
 
 export default function Home() {
   return (
-    <div className="p-4 space-y-4">
+    <div>  
+      <Query />
       <FileUploader />
-      <QueryBox />
     </div>
   );
 }

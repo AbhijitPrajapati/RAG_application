@@ -1,10 +1,10 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
-from ..model.model import load_model
-from ..data.data_handler import load_collection, add_documents
-from ..rag.query_engine import query
+from data.data_handler import load_collection, add_documents
+from model.load import load_model
+from rag.query_engine import query
 
 async def lifespan(app: FastAPI):
     app.state.collection = load_collection()
@@ -19,7 +19,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=['http://localhost:5173'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
@@ -34,15 +34,11 @@ async def query_rag(req: Query):
 
 @app.post('/upload')
 async def upload_files(files: list[UploadFile] = File(...)):
-    print(files[0].filename)
-
     names = []
     contents = []
     for f in files:
         names.append(f.filename)
-        contents.append(f.read())
+        t = await f.read()
+        contents.append(t.decode())
 
     add_documents(app.state.collection, contents, names)
-
-
-
