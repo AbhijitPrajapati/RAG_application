@@ -10,6 +10,8 @@ export default function Query() {
     const handleSubmit = async (e) => {
       e.preventDefault();
       setLoading(true);
+
+      setResponse('')
   
       try {
         const res = await fetch('http://localhost:8000/query', {
@@ -19,9 +21,22 @@ export default function Query() {
           },
           body: JSON.stringify({ query: query }),
         });
+
+        const reader = res.body?.getReader();  
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+          const { value, done } = await reader!.read();
+          if (done) break;
+      
+          setResponse(prev => prev + decoder.decode(value, { stream: true }));
+        }
+        if (buffer.length > 0 && buffer.startsWith('data: ')) {
+          console.log('Received last data:', buffer.slice(6));
+        }
+        console.log('Stream ended');
   
-        const data = await res.json();
-        setResponse(data.response); // adjust based on API response format
       } catch (err) {
         setResponse('Error: ' + err.message);
       } finally {

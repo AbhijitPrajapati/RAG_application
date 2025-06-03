@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
+from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -30,7 +31,7 @@ class Query(BaseModel):
 
 @app.post('/query')
 async def query_rag(req: Query):
-    return {'response': query(req.query, app.state.model, app.state.collection)}
+    return StreamingResponse(query(req.query, app.state.model, app.state.collection), media_type='text/event-stream')
 
 @app.post('/upload')
 async def upload_files(files: list[UploadFile] = File(...)):
