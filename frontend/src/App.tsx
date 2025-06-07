@@ -1,9 +1,9 @@
 import React from 'react';
-import Home from './pages/home';
+import ChatPage from './pages/ChatPage';
 
 
 function App() {
-  return <Home />;
+  return <ChatPage />;
 }
 
 export default App;

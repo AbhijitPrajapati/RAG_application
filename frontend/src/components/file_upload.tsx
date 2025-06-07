@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 export default function FileUploader() {
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [collection, setCollection] = useState('collection_1');
 
   const handleFileChange = (e) => {
     setFiles([...e.target.files]);
@@ -22,6 +23,7 @@ export default function FileUploader() {
 
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
+    formData.append('collection_name', collection);
 
     setUploading(true);
 

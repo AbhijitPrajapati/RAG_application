@@ -1,5 +1,5 @@
-def build_prompt(chunks, metadata, query):
-    context = '\n'.join([f'[Source: {metadata[i]["source"]}]\n{chunks[i]}' for i in range(len(chunks))])
+def build_prompt(chunks, sources, query):
+    context = '\n'.join([f'[Source: {sources[i]}]\n{chunks[i]}' for i in range(len(chunks))])
 
     out = f'''
     <s>[INST] 
@@ -13,11 +13,12 @@ def build_prompt(chunks, metadata, query):
 
     return out
 
-def query(query, model, collection, max_tokens=512, n_results=3):
-    assert collection.count() != 0
+def query(query, model, db, collections, max_tokens=512, n_results=3, temperature=0.8):
+    assert db.count() != 0
 
-    result = collection.query(query_texts=[query.strip()], n_results=n_results)
+    result = db.query(query_texts=[query.strip()], n_results=n_results, where={'collection': {'$in': collections}})
 
-    prompt = build_prompt(result['documents'][0], result['metadatas'][0], query.strip())
+    sources = [m['source'] for m in result['metadatas'][0]]
+    prompt = build_prompt(result['documents'][0], sources, query.strip())
 
-    yield from model(prompt, max_new_tokens = max_tokens, temperature=0.8)
+    yield from model(prompt, max_new_tokens=max_tokens, temperature=temperature)

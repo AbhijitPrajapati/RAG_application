@@ -1,6 +1,6 @@
 from nltk.tokenize import sent_tokenize
 
-def chunk_documents(texts, filenames, chunk_max_words, chunk_overlap_sentences):
+def chunk_documents(texts, filenames, collection, chunk_max_words, chunk_overlap_sentences):
     chunks = []
     metadata = []
 
@@ -20,6 +20,7 @@ def chunk_documents(texts, filenames, chunk_max_words, chunk_overlap_sentences):
                     'source': filename,
                     'chunk_index': len(chunks) - 1,  
                     'length': sum(len(se) for se in current),
+                    'collection': collection
                 })
 
                 current = current[-chunk_overlap_sentences:]
