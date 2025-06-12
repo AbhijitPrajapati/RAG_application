@@ -5,14 +5,9 @@ import { ScrollArea } from './ui/scroll-area';
 import { Input } from './ui/input';
 import { Toaster } from './ui/sonner';
 import { toast } from 'sonner';
+import { Message } from '@/types';
 
-export default function ChatInterface( { selectedCollections } ) {
-    type Message = {
-      role: 'user' | 'assistant';
-      content: string;
-    };
-
-    const [messages, setMessages] = useState<Message[]>([]);
+export default function ChatInterface( { selectedCollections, messages, setMessages, config } ) {
     const [query, setInput] = useState('');
 
     const streamResponse = async (body) => {
@@ -56,9 +51,7 @@ export default function ChatInterface( { selectedCollections } ) {
         body: JSON.stringify({ 
           query: q,
           selected_collections: Array.from(selectedCollections),
-          n_chunks: 3,
-          max_tokens: 512,
-          temperature: 0.8
+          ...config
         }),
       })
       .then(res => res.body)
@@ -113,7 +106,6 @@ export default function ChatInterface( { selectedCollections } ) {
             }
           }}
           placeholder='Type your message...'
-          className='flex-grow'
         />
         <Button onClick={sendMessage}>Send</Button>
       </div>

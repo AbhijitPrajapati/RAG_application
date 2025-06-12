@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, Response
 from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,7 +9,7 @@ from rag.query_engine import query
 
 async def lifespan(app: FastAPI):
     app.state.db = load_db()
-    app.state.model = load_model()
+    # app.state.model = load_model()
 
     yield
 
@@ -37,7 +37,7 @@ class Query(BaseModel):
 async def query_rag(req: Query):
     return StreamingResponse(query(req.query, app.state.model, app.state.db, req.selected_collections, req.max_tokens, req.n_chunks, req.temperature), media_type='text/event-stream')
 
-@app.post('/upload')
+@app.post('/upload', status_code=204)
 async def upload_files(collection_name: str = Form(...), files: list[UploadFile] = File(...)):
     names = []
     contents = []
@@ -47,10 +47,14 @@ async def upload_files(collection_name: str = Form(...), files: list[UploadFile]
         contents.append(t.decode())
 
     add_documents(app.state.db, contents, names, collection_name)
+    return Response(status_code=204)
 
-@app.get('/collections')
+class CollectionsResponse(BaseModel):
+    collections: list[str]
+
+@app.get('/collections', response_model=CollectionsResponse)
 async def get_collections():
-    return {'collections': collections(app.state.db)}
+    return CollectionsResponse(collections=collections(app.state.db))
 
 # @app.get('/files')
 # async def get_files(collection_name: str):
