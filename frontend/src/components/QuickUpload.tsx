@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useCollectionStore from '@/stores/useCollectionStore';
 import { Button } from './ui/button';
 import {
     Select,
@@ -12,7 +13,6 @@ import { toast } from 'sonner';
 import { Input } from './ui/input';
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogFooter,
     DialogHeader,
@@ -21,10 +21,11 @@ import {
   } from './ui/dialog'
 
 
-export default function QuickUpload( { collections } ) {
+export default function QuickUpload() {
     const [files, setFiles] = useState<File[]>([]);
     const [uploading, setUploading] = useState<boolean>(false);
     const [collection, setCollection] = useState<string | null>(null);
+    const { collections } = useCollectionStore();
 
     const upload = () => {
         if (!collection) {

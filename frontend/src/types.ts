@@ -3,9 +3,3 @@ export type Message = {
     content: string;
 };
 
-export type Config = {
-    n_chunks: number,
-    max_tokens: number,
-    temperature: number
-};
-

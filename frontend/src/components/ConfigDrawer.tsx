@@ -1,4 +1,5 @@
 import React from 'react';
+import useConfig from '@/stores/useConfig';
 import {
     Drawer,
     DrawerClose,
@@ -12,8 +13,8 @@ import {
 import { Button } from './ui/button';
 import ConfigSlider from './ConfigSlider';
 
-export default function ConfigDrawer( { config, setConfig, resetConfig } ) {
-
+export default function ConfigDrawer() {
+    const { n_chunks, max_tokens, temperature, setNChunks, setMaxTokens, setTemperature, reset } = useConfig();
 
     return (
         <div className='w-full p-3'>
@@ -31,36 +32,16 @@ export default function ConfigDrawer( { config, setConfig, resetConfig } ) {
                     <DrawerFooter>
 
                         <div className='w-7/10 mx-auto'>
-
-                            <ConfigSlider min={1} max={10} step={1} label='N Chunks' value={[config.n_chunks]} setValue={
-                                    (v) => setConfig(prev => ({ 
-                                        ...prev,
-                                        n_chunks: v[0]
-                                    }))
-                            }></ConfigSlider>
-
-                            <ConfigSlider min={64} max={2048} step={32} label='Max Tokens' value={[config.max_tokens]} setValue={
-                                    (v) => setConfig(prev => ({ 
-                                        ...prev,
-                                        max_tokens: v[0]
-                                    }))
-                            }></ConfigSlider>
-
-                            <ConfigSlider min={0} max={1} step={0.05} label='Temperature' value={[config.temperature]} setValue={
-                                    (v) => setConfig(prev => ({ 
-                                        ...prev,
-                                        temperature: v[0]
-                                    }))
-                            }></ConfigSlider>
-
+                            <ConfigSlider min={1} max={10} step={1} label='N Chunks' value={[n_chunks]} setValue={setNChunks} />
+                            <ConfigSlider min={64} max={2048} step={32} label='Max Tokens' value={[max_tokens]} setValue={setMaxTokens} />
+                            <ConfigSlider min={0} max={1} step={0.05} label='Temperature' value={[temperature]} setValue={setTemperature} />
                         </div>
 
-                        
                         <div className='flex flex-row mx-auto p-2 gap-x-4'>
                             <DrawerClose>
                                 <Button variant='outline'>Cancel</Button>
                             </DrawerClose>
-                            <Button onClick={resetConfig}>Reset</Button>
+                            <Button onClick={reset}>Reset</Button>
                         </div>
                     </DrawerFooter>
                 </DrawerContent>

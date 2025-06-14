@@ -2,8 +2,13 @@ import React  from 'react';
 import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
+import useCollectionsStore from '@/stores/useCollectionsStore';
+import useSelectedCollectionsStore from '@/stores/useSelectedCollectionsStore';
 
-export default function CollectionSelection( {selected, toggleCollection, collections} ) {
+export default function CollectionSelection() {
+    const { collections } = useCollectionsStore();
+    const { selected, toggleCollection } = useSelectedCollectionsStore();
+
     // collections = ['collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3','collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3'];
     // replace max-h-[200px] with just h-[200px] to make it the mininum height
     return (

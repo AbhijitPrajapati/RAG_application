@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import useSelectedCollectionsStore from '@/stores/useSelectedCollectionsStore';
+import useConfig from '@/stores/useConfig';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
@@ -7,8 +9,14 @@ import { Toaster } from './ui/sonner';
 import { toast } from 'sonner';
 import { Message } from '@/types';
 
-export default function ChatInterface( { selectedCollections, messages, setMessages, config } ) {
+export default function ChatInterface( { messages, setMessages } ) {
     const [query, setInput] = useState('');
+    const { selected } = useSelectedCollectionsStore(); 
+    const config = useConfig((state) => ({
+      n_chunks: state.n_chunks,
+      max_tokens: state.max_tokens,
+      temperature: state.temperature
+    }));
 
     const streamResponse = async (body) => {
       const updateMessage = (chunk) => {
@@ -50,7 +58,7 @@ export default function ChatInterface( { selectedCollections, messages, setMessa
         },
         body: JSON.stringify({ 
           query: q,
-          selected_collections: Array.from(selectedCollections),
+          selected_collections: Array.from(selected),
           ...config
         }),
       })
@@ -62,7 +70,7 @@ export default function ChatInterface( { selectedCollections, messages, setMessa
 
     const sendMessage = async (e) => {
       if (!query.trim()) return;
-      if (selectedCollections.size === 0) {
+      if (selected.size === 0) {
         toast('No collections have been selected');
         return;
       }
