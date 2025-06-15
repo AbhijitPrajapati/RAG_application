@@ -4,7 +4,7 @@ import ChatInterface from '@/components/ChatInterface';
 import CollectionSelection from '@/components/CollectionSelection';
 import ConfigDrawer from '@/components/ConfigDrawer';
 import QuickUpload from '@/components/QuickUpload';
-import useCollectionStore from '@/stores/useCollectionStore'
+import { useFetchCollections } from '@/stores/useCollectionStore'
 
 import { Button } from '@/components/ui/button';
 import { Message } from '@/types';
@@ -13,9 +13,7 @@ import { Message } from '@/types';
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const { fetchCollections } = useCollectionStore((state) => ({
-    fetchCollections: state.fetchCollections
-  }));
+  const fetchCollections = useFetchCollections();
 
   useEffect(() => {
     fetchCollections()

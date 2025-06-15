@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import useSelectedCollectionsStore from '@/stores/useSelectedCollectionsStore';
-import useConfig from '@/stores/useConfig';
+import { useSelectedIds } from '@/stores/useSelectedCollectionsStore';
+import { useConfigSnapshot } from '@/stores/useConfigStore';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
@@ -11,12 +11,8 @@ import { Message } from '@/types';
 
 export default function ChatInterface( { messages, setMessages } ) {
     const [query, setInput] = useState('');
-    const { selected } = useSelectedCollectionsStore(); 
-    const config = useConfig((state) => ({
-      n_chunks: state.n_chunks,
-      max_tokens: state.max_tokens,
-      temperature: state.temperature
-    }));
+    const selected_ids = useSelectedIds(); 
+    const config = useConfigSnapshot();
 
     const streamResponse = async (body) => {
       const updateMessage = (chunk) => {
@@ -58,7 +54,7 @@ export default function ChatInterface( { messages, setMessages } ) {
         },
         body: JSON.stringify({ 
           query: q,
-          selected_collections: Array.from(selected),
+          selected_collection_ids: Array.from(selected_ids),
           ...config
         }),
       })
@@ -70,7 +66,7 @@ export default function ChatInterface( { messages, setMessages } ) {
 
     const sendMessage = async (e) => {
       if (!query.trim()) return;
-      if (selected.size === 0) {
+      if (selected_ids.size === 0) {
         toast('No collections have been selected');
         return;
       }

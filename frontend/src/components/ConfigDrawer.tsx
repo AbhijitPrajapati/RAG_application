@@ -1,5 +1,4 @@
 import React from 'react';
-import useConfig from '@/stores/useConfig';
 import {
     Drawer,
     DrawerClose,
@@ -12,9 +11,17 @@ import {
 
 import { Button } from './ui/button';
 import ConfigSlider from './ConfigSlider';
+import { useConfigControls } from '@/stores/useConfigStore';
 
 export default function ConfigDrawer() {
-    const { n_chunks, max_tokens, temperature, setNChunks, setMaxTokens, setTemperature, reset } = useConfig();
+    const { n_chunks, 
+            max_tokens, 
+            temperature, 
+            setNChunks, 
+            setMaxTokens, 
+            setTemperature, 
+            reset 
+        } = useConfigControls();
 
     return (
         <div className='w-full p-3'>
