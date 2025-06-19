@@ -7,4 +7,6 @@ m = collection.get(include=['metadatas'])['metadatas']
 
 sources = set([e['source'] for e in m])
 
-print(sources)
+# print(sources)
+for meta in m:
+    print(meta['source'], meta['collection_id'])

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import ChatInterface from '@/components/ChatInterface';
 import CollectionSelection from '@/components/CollectionSelection';
@@ -24,6 +25,11 @@ export default function ChatPage() {
       <div className='flex flex-col w-2/10 items-center p-8'>
         <CollectionSelection/>
         <QuickUpload/>
+        <div className='w-full p-3'>
+          <Button className='w-full' asChild>
+            <Link to='/collections'>Manage Collections</Link>
+          </Button>
+        </div>
         <ConfigDrawer/>
         <div className='w-full p-3'>
           <Button onClick={() => setMessages([])} className='w-full'>Clear Chat</Button>

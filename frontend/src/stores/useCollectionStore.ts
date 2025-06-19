@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import axios from 'axios';
-import { Collection } from '../types';
+import { Collection } from '@/types';
 
 interface CollectionsState {
     collections: Collection[];

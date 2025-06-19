@@ -14,7 +14,7 @@ export default function CollectionSelection() {
     // collections = ['collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3','collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3'];
     // replace max-h-[200px] with just h-[200px] to make it the mininum height
     return (
-        <div className='p-3 w-full'>
+        <div className='w-full p-3'>
             <Label className='text-center m-2 p-1'>Collections</Label>
             <ScrollArea className='border rounded-2xl [&>[data-radix-scroll-area-viewport]]:max-h-[200px] w-full p-4'> 
                 <div>
