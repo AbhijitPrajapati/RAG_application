@@ -43,10 +43,10 @@ export default function ConfigSlider({
 
 				<Input
 					type='number'
-					value={value[0]}
+					value={value}
 					min={min}
 					max={max}
-					onChange={(e) => setValue(Number(e.target.value))}
+					onChange={(e) => setValue(e.target.valueAsNumber)}
 					className='w-1/10 align-right'
 				/>
 			</div>

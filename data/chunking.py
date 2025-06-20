@@ -1,6 +1,9 @@
 from nltk.tokenize import sent_tokenize
 
 def chunk_document(text, chunk_max_words, chunk_overlap_sentences):
+    '''
+    Splits document into chunks with maximum side and overlap. Returns chunks and metadata.
+    '''
     chunks = []
     metadata = []
     current = []

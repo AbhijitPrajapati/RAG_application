@@ -2,6 +2,7 @@ from fastapi import FastAPI, File, UploadFile, Form, Response
 from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from chromadb import PersistentClient
 from datetime import datetime
 
@@ -10,6 +11,7 @@ from model.load import load_model
 from rag.query_engine import query
 from data.sqlite_setup import SessionLocal
 
+@asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.chroma = PersistentClient('data/chroma_db').get_collection('documents')
     app.state.sqlite = SessionLocal()
@@ -62,7 +64,7 @@ class CollectionResponse(BaseModel):
     number_files: int
 
     class Config:
-        orm_mode: True
+        orm_mode = True
 
 @app.get('/collections', response_model=list[CollectionResponse])
 async def get_collections():
