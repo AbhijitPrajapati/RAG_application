@@ -23,14 +23,14 @@ export default function ChatPage() {
   return (
     <div className='flex'>
       <div className='flex flex-col w-2/10 items-center p-8'>
-        <CollectionSelection/>
-        <QuickUpload/>
+        <CollectionSelection />
+        <QuickUpload />
         <div className='w-full p-3'>
           <Button className='w-full' asChild>
             <Link to='/collections'>Manage Collections</Link>
           </Button>
         </div>
-        <ConfigDrawer/>
+        <ConfigDrawer />
         <div className='w-full p-3'>
           <Button onClick={() => setMessages([])} className='w-full'>Clear Chat</Button>
         </div>

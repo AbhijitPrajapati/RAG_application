@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ChatPage from './pages/ChatPage';
-import CollectionsPage from './pages/CollectionsPage';
+import CollectionsPage from './pages/collections/CollectionsPage';
 
 
 function App() {

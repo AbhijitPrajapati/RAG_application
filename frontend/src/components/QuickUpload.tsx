@@ -8,7 +8,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-  } from './ui/select'
+} from './ui/select'
 import { Toaster } from './ui/sonner';
 import { toast } from 'sonner';
 import { Input } from './ui/input';
@@ -19,7 +19,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-  } from './ui/dialog'
+} from './ui/dialog'
 
 
 export default function QuickUpload() {
@@ -38,10 +38,10 @@ export default function QuickUpload() {
         if (!files || files.length === 0) {
             toast('Please select file(s)');
             return;
-          }
-        
+        }
+
         setUploading(true);
-        
+
         const formData = new FormData();
         files.forEach((file) => formData.append('files', file));
         formData.append('collection_id', collectionId);
@@ -52,19 +52,19 @@ export default function QuickUpload() {
                 'Content-Type': 'multipart/form-data'
             }
         })
-        // fetch('http://localhost:8000/upload', {
-        //     method: 'POST',
-        //     body: formData
-        // })
-        .then(() => toast('Files successfully uploaded'))
-        .catch((e) => toast('Error Uploading Files: ' + e.message))
-        .finally(() => {
-            setUploading(false);
-            setFiles([]);
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
-            }
-        });
+            // fetch('http://localhost:8000/upload', {
+            //     method: 'POST',
+            //     body: formData
+            // })
+            .then(() => toast('Files successfully uploaded'))
+            .catch((e) => toast('Error Uploading Files: ' + e.message))
+            .finally(() => {
+                setUploading(false);
+                setFiles([]);
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
+            });
     };
 
     return (
@@ -83,7 +83,7 @@ export default function QuickUpload() {
                             <SelectValue placeholder='Select a Collection' />
                         </SelectTrigger>
                         <SelectContent>
-                            {collections.map(({id, name}) => (
+                            {collections.map(({ id, name }) => (
                                 <div key={id}>
                                     <SelectItem value={id}>{name}</SelectItem>
                                 </div>
@@ -93,13 +93,13 @@ export default function QuickUpload() {
 
                     <Input type='file' ref={fileInputRef} className='' multiple onChange={(e) => {
                         setFiles(Array.from(e.target.files ?? []))
-                    }}/>
+                    }} />
 
                     <DialogFooter>
                         <Button className='mx-auto min-w-[150px]' disabled={uploading} onClick={upload}>Upload</Button>
                     </DialogFooter>
                 </DialogContent>
-                <Toaster/>
+                <Toaster />
             </Dialog>
         </div>
     );

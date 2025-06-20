@@ -11,19 +11,19 @@ interface CollectionsState {
 const useCollectionStore = create<CollectionsState>((set) => ({
     collections: [],
     isLoading: false,
-    
+
     fetchCollections: async () => {
         set({ isLoading: true });
         await axios.get('http://localhost:8000/collections')
-        .then((res) => {
-            set({ collections: res.data })
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-        .finally(() => {
-            set({ isLoading: false })
-        });
+            .then((res) => {
+                set({ collections: res.data })
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                set({ isLoading: false })
+            });
     }
 }));
 

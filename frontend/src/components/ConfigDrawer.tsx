@@ -7,30 +7,30 @@ import {
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
-  } from './ui/drawer'
+} from './ui/drawer'
 
 import { Button } from './ui/button';
 import ConfigSlider from './ConfigSlider';
 import { useConfigControls } from '@/stores/useConfigStore';
 
 export default function ConfigDrawer() {
-    const { n_chunks, 
-            max_tokens, 
-            temperature, 
-            setNChunks, 
-            setMaxTokens, 
-            setTemperature, 
-            reset 
-        } = useConfigControls();
+    const { n_chunks,
+        max_tokens,
+        temperature,
+        setNChunks,
+        setMaxTokens,
+        setTemperature,
+        reset
+    } = useConfigControls();
 
     return (
         <div className='w-full p-3'>
             <Drawer>
-                
+
                 <DrawerTrigger asChild>
                     <Button className='w-full'>Configurations</Button>
                 </DrawerTrigger>
-                
+
 
                 <DrawerContent>
                     <DrawerHeader>

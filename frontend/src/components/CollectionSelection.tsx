@@ -1,9 +1,9 @@
-import React  from 'react';
+import React from 'react';
 import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 import { useCollections } from '@/stores/useCollectionStore';
-import {useSelectedIds, useToggleCollection} from '@/stores/useSelectedCollectionsStore';
+import { useSelectedIds, useToggleCollection } from '@/stores/useSelectedCollectionsStore';
 
 export default function CollectionSelection() {
     const collections = useCollections();
@@ -16,11 +16,11 @@ export default function CollectionSelection() {
     return (
         <div className='w-full p-3'>
             <Label className='text-center m-2 p-1'>Collections</Label>
-            <ScrollArea className='border rounded-2xl [&>[data-radix-scroll-area-viewport]]:max-h-[200px] w-full p-4'> 
+            <ScrollArea className='border rounded-2xl [&>[data-radix-scroll-area-viewport]]:max-h-[200px] w-full p-4'>
                 <div>
-                    {collections.map(({id, name}) => (
+                    {collections.map(({ id, name }) => (
                         <div key={id}>
-                            <Checkbox 
+                            <Checkbox
                                 checked={selected_ids.has(id)}
                                 onCheckedChange={() => toggleCollection(id)}
                             />
