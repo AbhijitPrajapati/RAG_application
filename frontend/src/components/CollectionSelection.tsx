@@ -3,16 +3,17 @@ import { ScrollArea } from './ui/scroll-area';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 import { useCollections } from '@/stores/useCollectionStore';
-import {
-	useSelectedIds,
-	useToggleCollection,
-} from '@/stores/useSelectedCollectionsStore';
 
-export default function CollectionSelection() {
+interface CollectionSelectionProps {
+	selectedCollectionIds: Set<number>;
+	toggleSelectedCollection: (id: number) => void;
+}
+
+export default function CollectionSelection({
+	selectedCollectionIds,
+	toggleSelectedCollection,
+}: CollectionSelectionProps) {
 	const collections = useCollections();
-	const selected_ids = useSelectedIds();
-	const toggleCollection = useToggleCollection();
-	// const { selected_ids, toggleCollection } = useSelectedCollectionsStore();
 
 	// collections = ['collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3','collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3'];
 	// replace max-h-[200px] with just h-[200px] to make it the mininum height
@@ -24,8 +25,10 @@ export default function CollectionSelection() {
 					{collections.map(({ id, name }) => (
 						<div key={id}>
 							<Checkbox
-								checked={selected_ids.has(id)}
-								onCheckedChange={() => toggleCollection(id)}
+								checked={selectedCollectionIds.has(id)}
+								onCheckedChange={() =>
+									toggleSelectedCollection(id)
+								}
 							/>
 							<label>{name}</label>
 						</div>

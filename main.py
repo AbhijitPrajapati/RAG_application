@@ -1,12 +1,12 @@
-from fastapi import FastAPI, File, UploadFile, Form, Response
-from starlette.responses import StreamingResponse
+from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from chromadb import PersistentClient
 from datetime import datetime
 
-from data.data_handler import add_documents, collections, files
+from data.data_handler import add_documents, collections, delete_collections
 from model.load import load_model
 from rag.query_engine import query
 from data.sqlite_setup import SessionLocal
@@ -40,11 +40,11 @@ class Query(BaseModel):
     max_tokens: int
     temperature: float
 
-@app.post('/query')
+@app.post('/query', response_class=StreamingResponse)
 async def query_rag(req: Query):
     return StreamingResponse(query(req.query, app.state.model, app.state.chroma, req.selected_collection_ids, req.max_tokens, req.n_chunks, req.temperature), media_type='text/event-stream')
 
-@app.post('/upload', status_code=204)
+@app.post('/upload')
 async def upload_files(collection_id: int = Form(...), files: list[UploadFile] = File(...)):
     names = []
     contents = []
@@ -54,7 +54,6 @@ async def upload_files(collection_id: int = Form(...), files: list[UploadFile] =
         contents.append(t.decode())
 
     add_documents(app.state.chroma, app.state.sqlite, contents, names, collection_id)
-    return Response(status_code=204)
 
 class CollectionResponse(BaseModel):
     id: int
@@ -64,11 +63,19 @@ class CollectionResponse(BaseModel):
     number_files: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 @app.get('/collections', response_model=list[CollectionResponse])
 async def get_collections():
     return collections(app.state.sqlite)
+
+@app.delete('/collections/{collection_id}')
+async def delete_collection(collection_id: int):
+    delete_collections(app.state.chroma, app.state.sqlite, [collection_id])
+
+@app.post('/collections')
+async def bulk_delete_collectinos(collection_ids: list[str]):
+    delete_collections(app.state.chroma, app.state.sqlite, collection_ids)
 
 # @app.get('/files')
 # async def get_files(collection_name: str):

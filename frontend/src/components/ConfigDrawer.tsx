@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
 	Drawer,
 	DrawerClose,
@@ -11,18 +11,32 @@ import {
 
 import { Button } from './ui/button';
 import ConfigSlider from './ConfigSlider';
-import { useConfigControls } from '@/stores/useConfigStore';
+import { Config } from '@/types';
 
-export default function ConfigDrawer() {
-	const {
-		n_chunks,
-		max_tokens,
-		temperature,
-		setNChunks,
-		setMaxTokens,
-		setTemperature,
-		reset,
-	} = useConfigControls();
+interface ConfigDrawerProps {
+	config: Config;
+	updateConfig: <K extends keyof Config>(key: K, value: Config[K]) => void;
+	resetConfig: () => void;
+}
+
+export default function ConfigDrawer({
+	config,
+	updateConfig,
+	resetConfig,
+}: ConfigDrawerProps) {
+	const { n_chunks, max_tokens, temperature } = config;
+
+	const curriedUpdaters: Record<string, (value: number) => void> = useMemo(
+		() =>
+			Object.keys(config).reduce(
+				(acc, key) => {
+					acc[key] = (value: number) => updateConfig(key, value);
+					return acc;
+				},
+				{} as Record<string, (value: number) => void>
+			),
+		[config, updateConfig]
+	);
 
 	return (
 		<div className='w-full p-3'>
@@ -43,7 +57,7 @@ export default function ConfigDrawer() {
 								step={1}
 								label='N Chunks'
 								value={n_chunks}
-								setValue={setNChunks}
+								setValue={curriedUpdaters.n_chunks}
 							/>
 							<ConfigSlider
 								min={64}
@@ -51,7 +65,7 @@ export default function ConfigDrawer() {
 								step={32}
 								label='Max Tokens'
 								value={max_tokens}
-								setValue={setMaxTokens}
+								setValue={curriedUpdaters.max_tokens}
 							/>
 							<ConfigSlider
 								min={0}
@@ -59,7 +73,7 @@ export default function ConfigDrawer() {
 								step={0.05}
 								label='Temperature'
 								value={temperature}
-								setValue={setTemperature}
+								setValue={curriedUpdaters.temperature}
 							/>
 						</div>
 
@@ -67,7 +81,7 @@ export default function ConfigDrawer() {
 							<DrawerClose>
 								<Button variant='outline'>Cancel</Button>
 							</DrawerClose>
-							<Button onClick={reset}>Reset</Button>
+							<Button onClick={resetConfig}>Reset</Button>
 						</div>
 					</DrawerFooter>
 				</DrawerContent>

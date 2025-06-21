@@ -1,6 +1,7 @@
 
 from .chunking import chunk_document
 from .sqlite_setup import Collection
+from sqlalchemy import delete
 from datetime import datetime
 
 def files(chroma_db, collection_id):
@@ -9,6 +10,7 @@ def files(chroma_db, collection_id):
 
 def add_documents(chroma_db, sqlite, texts, filenames, collection_id, chunk_max_words=400, chunk_overlap_sentences=1):
     chunks, metadata = [], []
+    
     for text, filename in zip(texts, filenames):
         c, m = chunk_document(text, chunk_max_words, chunk_overlap_sentences)
         for meta in m: meta.update({'source': filename, 'collection_id': collection_id})
@@ -28,4 +30,16 @@ def add_documents(chroma_db, sqlite, texts, filenames, collection_id, chunk_max_
 
 def collections(sqlite_db):
     return sqlite_db.query(Collection).all()
+
+def delete_collections(chroma_db, sqlite, collection_ids):
+    chunks = chroma_db.query(where={'collection_id': 
+                                    {'$in': [collection_ids]}
+                                    }, include=['ids'])
+    chunk_ids = chunks['ids']
+    if chunk_ids:
+        chroma_db.delete(ids=chunk_ids)
+
+    stmt = delete(Collection).where(Collection.id.in_(collection_ids))
+    sqlite.execute(stmt)
+    sqlite.commit()
 

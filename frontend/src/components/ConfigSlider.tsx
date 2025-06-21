@@ -9,7 +9,7 @@ interface ConfigSliderProps {
 	step: number;
 	label: string;
 	value: number;
-	setValue: React.Dispatch<React.SetStateAction<number>>;
+	setValue: (val: number) => void;
 }
 
 export default function ConfigSlider({

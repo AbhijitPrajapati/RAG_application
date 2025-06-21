@@ -8,11 +8,38 @@ import QuickUpload from '@/components/QuickUpload';
 import { useFetchCollections } from '@/stores/useCollectionStore';
 
 import { Button } from '@/components/ui/button';
-import { Message } from '@/types';
+import { Message, Config } from '@/types';
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const fetchCollections = useFetchCollections();
+
+	const defaultConfig = {
+		n_chunks: 4,
+		max_tokens: 512,
+		temperature: 0.7,
+	};
+	const [config, setConfig] = useState<Config>(defaultConfig);
+
+	const updateConfig = <K extends keyof Config>(key: K, value: Config[K]) => {
+		setConfig((prev) => ({ ...prev, [key]: value }));
+	};
+
+	const resetConfig = () => setConfig(defaultConfig);
+
+	const [selectedCollectionIds, setSelectedCollectionIds] = useState<
+		Set<number>
+	>(new Set());
+
+	const toggleSelectedCollection = (id) => {
+		const newSet = new Set(selectedCollectionIds);
+		if (newSet.has(id)) {
+			newSet.delete(id);
+		} else {
+			newSet.add(id);
+		}
+		setSelectedCollectionIds(newSet);
+	};
 
 	useEffect(() => {
 		fetchCollections();
@@ -21,21 +48,33 @@ export default function ChatPage() {
 	return (
 		<div className='flex'>
 			<div className='flex flex-col w-2/10 items-center p-8'>
-				<CollectionSelection />
+				<CollectionSelection
+					selectedCollectionIds={selectedCollectionIds}
+					toggleSelectedCollection={toggleSelectedCollection}
+				/>
 				<QuickUpload />
 				<div className='w-full p-3'>
 					<Button className='w-full' asChild>
 						<Link to='/collections'>Manage Collections</Link>
 					</Button>
 				</div>
-				<ConfigDrawer />
+				<ConfigDrawer
+					config={config}
+					updateConfig={updateConfig}
+					resetConfig={resetConfig}
+				/>
 				<div className='w-full p-3'>
 					<Button onClick={() => setMessages([])} className='w-full'>
 						Clear Chat
 					</Button>
 				</div>
 			</div>
-			<ChatInterface messages={messages} setMessages={setMessages} />
+			<ChatInterface
+				messages={messages}
+				setMessages={setMessages}
+				selectedCollectionIds={selectedCollectionIds}
+				config={config}
+			/>
 		</div>
 	);
 }
