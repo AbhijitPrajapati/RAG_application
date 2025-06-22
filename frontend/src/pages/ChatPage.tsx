@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import ChatInterface from '@/components/ChatInterface';
 import CollectionSelection from '@/components/CollectionSelection';
 import ConfigDrawer from '@/components/ConfigDrawer';
 import QuickUpload from '@/components/QuickUpload';
-import { useFetchCollections } from '@/stores/useCollectionStore';
 
 import { Button } from '@/components/ui/button';
-import { Message, Config } from '@/types';
+import type { Message, Config } from '@/types';
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([]);
-	const fetchCollections = useFetchCollections();
 
 	const defaultConfig = {
 		n_chunks: 4,
@@ -31,7 +29,7 @@ export default function ChatPage() {
 		Set<number>
 	>(new Set());
 
-	const toggleSelectedCollection = (id) => {
+	const toggleSelectedCollection = (id: number) => {
 		const newSet = new Set(selectedCollectionIds);
 		if (newSet.has(id)) {
 			newSet.delete(id);
@@ -40,10 +38,6 @@ export default function ChatPage() {
 		}
 		setSelectedCollectionIds(newSet);
 	};
-
-	useEffect(() => {
-		fetchCollections();
-	}, []);
 
 	return (
 		<div className='flex'>

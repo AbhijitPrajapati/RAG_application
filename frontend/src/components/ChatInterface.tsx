@@ -4,7 +4,8 @@ import { Card, CardContent } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
 import { Input } from './ui/input';
 import { toast } from 'sonner';
-import { Message, Config } from '@/types';
+import type { Message, Config } from '@/types';
+import { fetchRAGResponse } from '@/services';
 
 interface ChatInterfaceProps {
 	messages: Message[];
@@ -21,8 +22,8 @@ export default function ChatInterface({
 }: ChatInterfaceProps) {
 	const [query, setInput] = useState('');
 
-	const streamResponse = async (body) => {
-		const updateMessage = (chunk) => {
+	const streamResponse = async (body: ReadableStream<Uint8Array>) => {
+		const updateMessage = (chunk: string) => {
 			setMessages((prev) => {
 				const updated = [...prev];
 				const idx = updated.length - 1;
@@ -52,35 +53,7 @@ export default function ChatInterface({
 		console.log('Stream ended');
 	};
 
-	const fetchResponse = async (q) => {
-		return fetch('http://localhost:8000/query', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				query: q,
-				selected_collection_ids: Array.from(selectedCollectionIds),
-				...config,
-			}),
-		})
-			.then(async (res) => {
-				if (!res.ok) {
-					const errorText = await res.text();
-					throw new Error(errorText || `HTTP ${res.status}`);
-				}
-
-				return res.body;
-			})
-			.catch((err) =>
-				setMessages((prev) => [
-					...prev,
-					{ role: 'assistant', content: 'Error: ' + err.message },
-				])
-			);
-	};
-
-	const sendMessage = async (e) => {
+	const sendMessage = async () => {
 		if (!query.trim()) return;
 		if (selectedCollectionIds.size === 0) {
 			toast('No collections have been selected');
@@ -89,9 +62,23 @@ export default function ChatInterface({
 
 		setMessages((prev) => [...prev, { role: 'user', content: query }]);
 		setInput('');
-
-		const body = await fetchResponse(query);
-		await streamResponse(body);
+		try {
+			const response_body = await fetchRAGResponse(
+				query,
+				config,
+				selectedCollectionIds
+			);
+			if (response_body) {
+				await streamResponse(response_body);
+			}
+		} catch (err) {
+			if (err instanceof Error) {
+				setMessages((prev) => [
+					...prev,
+					{ role: 'assistant', content: 'Error: ' + err.message },
+				]);
+			}
+		}
 	};
 
 	return (
@@ -121,7 +108,7 @@ export default function ChatInterface({
 					onKeyDown={(e) => {
 						if (e.key === 'Enter' && !e.shiftKey) {
 							e.preventDefault();
-							sendMessage(e);
+							sendMessage();
 						}
 					}}
 					placeholder='Type your message...'

@@ -1,16 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 
-import {
-	ColumnDef,
-	flexRender,
-	getCoreRowModel,
-	useReactTable,
-	SortingState,
-	getSortedRowModel,
-	ColumnFiltersState,
-	getFilteredRowModel,
-} from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
 
 import {
 	Table,
@@ -21,79 +11,17 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import type { Table as TanstackTable } from '@tanstack/react-table';
 
-import Collection from '@/types';
-import { toast } from 'sonner';
+import type { Collection } from '@/types';
 
-interface DataTableProps<TData, TValue> {
-	columns: ColumnDef<TData, TValue>[];
-	data: TData[];
+interface DataTableProps {
+	table: TanstackTable<Collection>;
 }
 
-export function DataTable<TData, TValue>({
-	columns,
-	data,
-}: DataTableProps<TData, TValue>) {
-	const [sorting, setSorting] = useState<SortingState>([]);
-	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-	const [rowSelection, setRowSelection] = useState({});
-
-	const table = useReactTable({
-		data,
-		columns,
-		state: {
-			sorting,
-			columnFilters,
-			rowSelection,
-		},
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		onRowSelectionChange: setRowSelection,
-		getRowId: (row: Collection) => row.id.toString(),
-		getSortedRowModel: getSortedRowModel(),
-		getCoreRowModel: getCoreRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-	});
-
-	const deleteBulk = () => {
-		fetch('http://localhost:8000/collections', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(Object.keys(rowSelection).map(Number)),
-		})
-			.then(async (res) => {
-				if (!res.ok) {
-					const errorText = await res.text();
-					throw new Error(errorText || `HTTP ${res.status}`);
-				}
-				return res.json();
-			})
-			.then(() => toast('Collections Deleted'))
-			.catch((err) => toast(err.message));
-	};
-
+export function DataTable({ table }: DataTableProps) {
 	return (
 		<>
-			<div className='flex flex-row items-center py-4 gap-x-4'>
-				<Input
-					placeholder='Search'
-					value={
-						(table.getColumn('name')?.getFilterValue() as string) ??
-						''
-					}
-					onChange={(event) =>
-						table
-							.getColumn('name')
-							?.setFilterValue(event.target.value)
-					}
-					className='max-w-sm'
-				/>
-				<Button onClick={deleteBulk}>Delete</Button>
-			</div>
 			<div className='rounded-md border'>
 				<Table>
 					<TableHeader>
@@ -137,7 +65,7 @@ export function DataTable<TData, TValue>({
 						) : (
 							<TableRow>
 								<TableCell
-									colSpan={columns.length}
+									colSpan={table.getAllLeafColumns().length}
 									className='h-24 text-center'
 								>
 									No results.

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useCollections } from '@/stores/useCollectionStore';
+import { _uploadFiles } from '@/services';
 import { Button } from './ui/button';
 import {
 	Select,
@@ -23,10 +24,10 @@ export default function QuickUpload() {
 	const [files, setFiles] = useState<File[]>([]);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [uploading, setUploading] = useState<boolean>(false);
-	const [collectionId, setCollectionId] = useState<string | null>(null);
+	const [collectionId, setCollectionId] = useState<number | null>(null);
 	const collections = useCollections();
 
-	const upload = () => {
+	const upload = async () => {
 		if (!collectionId) {
 			toast('Please select a collection');
 			return;
@@ -39,31 +40,22 @@ export default function QuickUpload() {
 
 		setUploading(true);
 
-		const formData = new FormData();
-		files.forEach((file) => formData.append('files', file));
-		formData.append('collection_id', collectionId);
+		try {
+			const data = await _uploadFiles(files, collectionId);
+			const text =
+				data.uploaded_files.length === 1
+					? data.uploaded_files[0]
+					: `${data.uploaded_files.length} files`;
 
-		fetch('http://localhost:8000/upload', {
-			method: 'POST',
-			body: formData,
-		})
-			.then(async (res) => {
-				if (!res.ok) {
-					const errorText = await res.text();
-					throw new Error(errorText || `HTTP ${res.status}`);
-				}
-				return res.json(); // expected successful response
-			})
-			.then(() => toast('Files successfully uploaded'))
-			.catch((e) => toast('Error Uploading Files: ' + e.message))
-
-			.finally(() => {
-				setUploading(false);
-				setFiles([]);
-				if (fileInputRef.current) {
-					fileInputRef.current.value = '';
-				}
-			});
+			toast(`${text} uploaded`);
+		} catch (err) {
+			toast(`Error uploading files: ${err}`);
+		} finally {
+			setUploading(false);
+			if (fileInputRef.current) {
+				fileInputRef.current.value = '';
+			}
+		}
 	};
 
 	return (
@@ -77,14 +69,16 @@ export default function QuickUpload() {
 						<DialogTitle>Upload Files</DialogTitle>
 					</DialogHeader>
 
-					<Select onValueChange={(e) => setCollectionId(e)}>
+					<Select onValueChange={(e) => setCollectionId(Number(e))}>
 						<SelectTrigger className='w-[300px]'>
 							<SelectValue placeholder='Select a Collection' />
 						</SelectTrigger>
 						<SelectContent>
 							{collections.map(({ id, name }) => (
 								<div key={id}>
-									<SelectItem value={id}>{name}</SelectItem>
+									<SelectItem value={id.toString()}>
+										{name}
+									</SelectItem>
 								</div>
 							))}
 						</SelectContent>

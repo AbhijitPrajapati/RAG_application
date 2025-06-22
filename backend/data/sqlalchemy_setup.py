@@ -16,6 +16,13 @@ class Collection(Base):
     last_modified = Column(DateTime, default=datetime.now, nullable=False)
     number_files = Column(Integer, nullable=False, default=0)
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 # Base.metadata.create_all(bind=engine)
 
 # s = SessionLocal()

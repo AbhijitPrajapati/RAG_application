@@ -11,7 +11,7 @@ import {
 
 import { Button } from './ui/button';
 import ConfigSlider from './ConfigSlider';
-import { Config } from '@/types';
+import type { Config } from '@/types';
 
 interface ConfigDrawerProps {
 	config: Config;
@@ -30,7 +30,9 @@ export default function ConfigDrawer({
 		() =>
 			Object.keys(config).reduce(
 				(acc, key) => {
-					acc[key] = (value: number) => updateConfig(key, value);
+					acc[key] = (value: number) => {
+						updateConfig(key as keyof Config, value);
+					};
 					return acc;
 				},
 				{} as Record<string, (value: number) => void>

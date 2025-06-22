@@ -1,6 +1,11 @@
 import { create } from 'zustand';
-import axios from 'axios';
-import { Collection } from '@/types';
+import type { Collection } from '@/types';
+import {
+	_getCollections,
+	_deleteCollection,
+	_bulkDeleteCollections,
+	_createCollection,
+} from '@/services';
 
 interface CollectionsState {
 	collections: Collection[];
@@ -14,17 +19,9 @@ const useCollectionStore = create<CollectionsState>((set) => ({
 
 	fetchCollections: async () => {
 		set({ isLoading: true });
-		await axios
-			.get('http://localhost:8000/collections')
-			.then((res) => {
-				set({ collections: res.data });
-			})
-			.catch((err) => {
-				console.log(err);
-			})
-			.finally(() => {
-				set({ isLoading: false });
-			});
+		const data = await _getCollections();
+		set({ collections: data });
+		set({ isLoading: false });
 	},
 }));
 
@@ -32,3 +29,19 @@ export const useCollections = () =>
 	useCollectionStore((state) => state.collections);
 export const useFetchCollections = () =>
 	useCollectionStore((state) => state.fetchCollections);
+
+export const deleteCollection = async (id: number) => {
+	const data = await _deleteCollection(id);
+	useCollectionStore.getState().fetchCollections();
+	return data;
+};
+export const deleteCollections = async (ids: Array<number>) => {
+	const data = await _bulkDeleteCollections(ids);
+	useCollectionStore.getState().fetchCollections();
+	return data;
+};
+export const createCollection = async (name: string) => {
+	const data = await _createCollection(name);
+	useCollectionStore.getState().fetchCollections();
+	return data;
+};

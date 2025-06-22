@@ -1,36 +1,13 @@
 import React from 'react';
 
-import { ColumnDef } from '@tanstack/react-table';
-import { Collection } from '@/types';
+import type { ColumnDef } from '@tanstack/react-table';
+import type { Collection } from '@/types';
 
-import { MoreHorizontal, ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-
-import { toast } from 'sonner';
-
-const deleteCollection = (id: number) => {
-	fetch('http://localhost:8000/collections/' + id, {
-		method: 'DELETE',
-	})
-		.then(async (res) => {
-			if (!res.ok) {
-				const errorText = await res.text();
-				throw new Error(errorText || `HTTP ${res.status}`);
-			}
-			return res.json();
-		})
-		.then(() => toast('Collection Deleted'))
-		.catch((err) => toast(err.message));
-};
+import { CollectionsTableDropdown } from '@/components/CollectionsTableDropdown';
 
 export const columns: ColumnDef<Collection>[] = [
 	{
@@ -118,23 +95,9 @@ export const columns: ColumnDef<Collection>[] = [
 		id: 'actions',
 		cell: ({ row }) => {
 			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='ghost' className='h-8 w-8 p-0'>
-							<span className='sr-only'>Open menu</span>
-							<MoreHorizontal className='h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						<DropdownMenuItem>Manage Collection</DropdownMenuItem>
-						<DropdownMenuItem>Rename</DropdownMenuItem>
-						<DropdownMenuItem
-							onSelect={() =>
-								deleteCollection(row.getValue('id'))
-							}
-						></DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<CollectionsTableDropdown
+					collection={row.original}
+				></CollectionsTableDropdown>
 			);
 		},
 	},
