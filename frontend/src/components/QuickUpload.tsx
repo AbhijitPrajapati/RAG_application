@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import axios from 'axios';
 import { useCollections } from '@/stores/useCollectionStore';
 import { Button } from './ui/button';
 import {
@@ -9,7 +8,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from './ui/select';
-import { Toaster } from './ui/sonner';
 import { toast } from 'sonner';
 import { Input } from './ui/input';
 import {
@@ -45,14 +43,20 @@ export default function QuickUpload() {
 		files.forEach((file) => formData.append('files', file));
 		formData.append('collection_id', collectionId);
 
-		axios
-			.post('http://localhost:8000/upload', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
+		fetch('http://localhost:8000/upload', {
+			method: 'POST',
+			body: formData,
+		})
+			.then(async (res) => {
+				if (!res.ok) {
+					const errorText = await res.text();
+					throw new Error(errorText || `HTTP ${res.status}`);
+				}
+				return res.json(); // expected successful response
 			})
 			.then(() => toast('Files successfully uploaded'))
 			.catch((e) => toast('Error Uploading Files: ' + e.message))
+
 			.finally(() => {
 				setUploading(false);
 				setFiles([]);
@@ -106,7 +110,6 @@ export default function QuickUpload() {
 						</Button>
 					</DialogFooter>
 				</DialogContent>
-				<Toaster />
 			</Dialog>
 		</div>
 	);

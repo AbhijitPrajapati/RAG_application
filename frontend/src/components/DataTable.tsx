@@ -1,6 +1,5 @@
-'use client';
-
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 import {
 	ColumnDef,
@@ -25,6 +24,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import Collection from '@/types';
+import { toast } from 'sonner';
+
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
@@ -34,26 +36,45 @@ export function DataTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
-	const [sorting, setSorting] = React.useState<SortingState>([]);
-	const [columnFilters, setColumnFilters] =
-		React.useState<ColumnFiltersState>([]);
-	const [rowSelection, setRowSelection] = React.useState({});
+	const [sorting, setSorting] = useState<SortingState>([]);
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+	const [rowSelection, setRowSelection] = useState({});
 
 	const table = useReactTable({
 		data,
 		columns,
-		getCoreRowModel: getCoreRowModel(),
-		onSortingChange: setSorting,
-		getSortedRowModel: getSortedRowModel(),
-		onColumnFiltersChange: setColumnFilters,
-		getFilteredRowModel: getFilteredRowModel(),
-		onRowSelectionChange: setRowSelection,
 		state: {
 			sorting,
 			columnFilters,
 			rowSelection,
 		},
+		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
+		onRowSelectionChange: setRowSelection,
+		getRowId: (row: Collection) => row.id.toString(),
+		getSortedRowModel: getSortedRowModel(),
+		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 	});
+
+	const deleteBulk = () => {
+		fetch('http://localhost:8000/collections', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(Object.keys(rowSelection).map(Number)),
+		})
+			.then(async (res) => {
+				if (!res.ok) {
+					const errorText = await res.text();
+					throw new Error(errorText || `HTTP ${res.status}`);
+				}
+				return res.json();
+			})
+			.then(() => toast('Collections Deleted'))
+			.catch((err) => toast(err.message));
+	};
 
 	return (
 		<>
@@ -71,7 +92,7 @@ export function DataTable<TData, TValue>({
 					}
 					className='max-w-sm'
 				/>
-				<Button>Delete</Button>
+				<Button onClick={deleteBulk}>Delete</Button>
 			</div>
 			<div className='rounded-md border'>
 				<Table>

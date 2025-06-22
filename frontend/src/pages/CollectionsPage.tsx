@@ -1,6 +1,6 @@
 import React from 'react';
-import { columns } from './columns';
-import { DataTable } from './DataTable';
+import { columns } from '@/components/CollectionsTableColumns';
+import { DataTable } from '@/components/DataTable';
 import { useCollections } from '@/stores/useCollectionStore';
 
 export default function CollectionsPage() {

@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 
 import { ColumnDef } from '@tanstack/react-table';
@@ -16,6 +14,23 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
+import { toast } from 'sonner';
+
+const deleteCollection = (id: number) => {
+	fetch('http://localhost:8000/collections/' + id, {
+		method: 'DELETE',
+	})
+		.then(async (res) => {
+			if (!res.ok) {
+				const errorText = await res.text();
+				throw new Error(errorText || `HTTP ${res.status}`);
+			}
+			return res.json();
+		})
+		.then(() => toast('Collection Deleted'))
+		.catch((err) => toast(err.message));
+};
 
 export const columns: ColumnDef<Collection>[] = [
 	{
@@ -101,7 +116,7 @@ export const columns: ColumnDef<Collection>[] = [
 	},
 	{
 		id: 'actions',
-		cell: () => {
+		cell: ({ row }) => {
 			return (
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
@@ -113,7 +128,11 @@ export const columns: ColumnDef<Collection>[] = [
 					<DropdownMenuContent align='end'>
 						<DropdownMenuItem>Manage Collection</DropdownMenuItem>
 						<DropdownMenuItem>Rename</DropdownMenuItem>
-						<DropdownMenuItem>Delete</DropdownMenuItem>
+						<DropdownMenuItem
+							onSelect={() =>
+								deleteCollection(row.getValue('id'))
+							}
+						></DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			);

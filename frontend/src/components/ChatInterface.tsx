@@ -3,7 +3,6 @@ import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
 import { Input } from './ui/input';
-import { Toaster } from './ui/sonner';
 import { toast } from 'sonner';
 import { Message, Config } from '@/types';
 
@@ -65,7 +64,14 @@ export default function ChatInterface({
 				...config,
 			}),
 		})
-			.then((res) => res.body)
+			.then(async (res) => {
+				if (!res.ok) {
+					const errorText = await res.text();
+					throw new Error(errorText || `HTTP ${res.status}`);
+				}
+
+				return res.body;
+			})
 			.catch((err) =>
 				setMessages((prev) => [
 					...prev,
@@ -122,7 +128,6 @@ export default function ChatInterface({
 				/>
 				<Button onClick={sendMessage}>Send</Button>
 			</div>
-			<Toaster />
 		</Card>
 	);
 }

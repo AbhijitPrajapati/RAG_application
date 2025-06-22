@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, Body
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,7 +15,7 @@ from data.sqlite_setup import SessionLocal
 async def lifespan(app: FastAPI):
     app.state.chroma = PersistentClient('data/chroma_db').get_collection('documents')
     app.state.sqlite = SessionLocal()
-    # app.state.model = load_model()
+    app.state.model = load_model()
 
     yield
 
@@ -74,7 +74,7 @@ async def delete_collection(collection_id: int):
     delete_collections(app.state.chroma, app.state.sqlite, [collection_id])
 
 @app.post('/collections')
-async def bulk_delete_collectinos(collection_ids: list[str]):
+async def bulk_delete_collectinos(collection_ids: list[int] = Body(...)):
     delete_collections(app.state.chroma, app.state.sqlite, collection_ids)
 
 # @app.get('/files')
