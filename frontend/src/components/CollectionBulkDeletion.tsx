@@ -21,11 +21,11 @@ export default function CollectionBulkDeletion({
 }: CollectionBulkDeletionProps) {
 	const deleteBulk = async () => {
 		try {
-			const data = await deleteCollections(deletion_ids);
+			await deleteCollections(deletion_ids);
 			const text =
-				data.collection_ids.length === 1
-					? `collection ids ${data.collection_ids[0]}`
-					: `${data.collection_ids.length} collections`;
+				deletion_ids.length === 1
+					? `collection ids ${deletion_ids}`
+					: `${deletion_ids.length} collections`;
 
 			toast(`Deleted ${text}`);
 		} catch (err) {

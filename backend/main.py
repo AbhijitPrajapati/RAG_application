@@ -5,13 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from chromadb import PersistentClient
 
-from models import Query, CollectionResponse, UploadResponse, CollectionCreationResponse, CollectionCreationRequest
-from .data.documents import add_documents, read_files
-from .data.collections import collections, delete_collections, create_collection
+from models import Query, CollectionResponse, CollectionCreationRequest, CollectionCreationResponse
+from data.documents import add_documents, read_files
+from data.collections import collections, delete_collections, create_collection
 from llm.load import load_model
 from rag.query_engine import query
 from data.sqlalchemy_setup import get_db
-from .errors import AppError
+from errors import AppError
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -44,11 +44,11 @@ async def error_handler(exc: AppError):
 async def query_rag(req: Query):
     return StreamingResponse(query(req.query, app.state.model, app.state.chroma, req.selected_collection_ids, req.max_tokens, req.n_chunks, req.temperature), media_type='text/event-stream')
 
-@app.post('/upload', response_model=UploadResponse, status_code=status.HTTP_201_CREATED)
+@app.post('/upload', status_code=status.HTTP_201_CREATED)
 async def upload_files(collection_id: int = Form(...), files: list[UploadFile] = File(...), sql_db = Depends(get_db)):
     names, contents = await read_files(files)
     add_documents(app.state.chroma, sql_db, contents, names, collection_id)
-    return UploadResponse(uploaded_files=names)
+    return Response(status_code=status.HTTP_201_CREATED)
 
 
 @app.get('/collections', response_model=list[CollectionResponse])
@@ -68,7 +68,7 @@ async def delete_collections_bulk(collection_ids: list[int] = Body(...), sql_db 
 
 @app.post('/collections', response_model=CollectionCreationResponse, status_code=status.HTTP_201_CREATED)
 async def _create_collection(req: CollectionCreationRequest, sql_db = Depends(get_db)):
-    return CollectionCreationResponse(collection=create_collection(req.name, sql_db))
+    return CollectionCreationResponse(collection_id=create_collection(req.name, sql_db)) # type: ignore
 
 # @app.get('/files')
 # async def get_files(collection_name: str):

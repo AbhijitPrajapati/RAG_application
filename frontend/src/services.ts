@@ -34,7 +34,7 @@ export const _deleteCollection = async (id: number) => {
 		method: 'DELETE',
 	});
 	await fetchOkay(res);
-	return res.json();
+	return res.status;
 };
 
 export const _uploadFiles = async (files: File[], collectionId: number) => {
@@ -47,7 +47,7 @@ export const _uploadFiles = async (files: File[], collectionId: number) => {
 		body: formData,
 	});
 	await fetchOkay(res);
-	return res.json();
+	return res.status;
 };
 
 export const _bulkDeleteCollections = async (ids: Array<number>) => {
@@ -60,7 +60,7 @@ export const _bulkDeleteCollections = async (ids: Array<number>) => {
 	});
 
 	await fetchOkay(res);
-	return res.json();
+	return res.status;
 };
 
 export const _getCollections = async () => {

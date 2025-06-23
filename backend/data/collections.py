@@ -1,6 +1,6 @@
 from .sqlalchemy_setup import Collection
 from sqlalchemy.exc import IntegrityError
-from ..errors import DuplicateCollectionError
+from errors import DuplicateCollectionError
 
 def collections(sql_db):
     return sql_db.query(Collection).all()
@@ -22,7 +22,7 @@ def create_collection(name, sql_db):
         sql_db.add(collection)
         sql_db.commit()
         sql_db.refresh(collection)
-        return collection
+        return collection.id
     except IntegrityError:
         sql_db.rollback()
         raise DuplicateCollectionError(name)

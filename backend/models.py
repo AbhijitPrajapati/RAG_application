@@ -28,14 +28,8 @@ class CollectionResponse(BaseModel):
     class Config:
         from_attributes = True
 
-class UploadResponse(BaseModel):
-    uploaded_files: list[str]
-
-# class BulkCollectionDeletionResponse(BaseModel):
-#     collection_ids: list[int]
-
-class CollectionCreationResponse(BaseModel):
-    collection: CollectionResponse
-
 class CollectionCreationRequest(BaseModel):
     name: str
+
+class CollectionCreationResponse(BaseModel):
+    collection_id: int

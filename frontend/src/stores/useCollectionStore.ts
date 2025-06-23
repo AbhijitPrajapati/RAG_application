@@ -31,17 +31,14 @@ export const useFetchCollections = () =>
 	useCollectionStore((state) => state.fetchCollections);
 
 export const deleteCollection = async (id: number) => {
-	const data = await _deleteCollection(id);
+	await _deleteCollection(id);
 	useCollectionStore.getState().fetchCollections();
-	return data;
 };
 export const deleteCollections = async (ids: Array<number>) => {
-	const data = await _bulkDeleteCollections(ids);
+	await _bulkDeleteCollections(ids);
 	useCollectionStore.getState().fetchCollections();
-	return data;
 };
 export const createCollection = async (name: string) => {
-	const data = await _createCollection(name);
+	await _createCollection(name);
 	useCollectionStore.getState().fetchCollections();
-	return data;
 };

@@ -2,7 +2,7 @@
 from .chunking import chunk_document
 from .sqlalchemy_setup import Collection
 from datetime import datetime
-from ..errors import EmptyFileError, InvalidFileFormatError
+from errors import EmptyFileError, InvalidFileFormatError
 
 # seperate read_files when more file types come
 

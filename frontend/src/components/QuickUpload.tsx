@@ -41,11 +41,9 @@ export default function QuickUpload() {
 		setUploading(true);
 
 		try {
-			const data = await _uploadFiles(files, collectionId);
+			await _uploadFiles(files, collectionId);
 			const text =
-				data.uploaded_files.length === 1
-					? data.uploaded_files[0]
-					: `${data.uploaded_files.length} files`;
+				files.length === 1 ? files[0].name : `${files.length} files`;
 
 			toast(`${text} uploaded`);
 		} catch (err) {

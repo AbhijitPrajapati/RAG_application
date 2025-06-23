@@ -22,8 +22,8 @@ export function CollectionsTableDropdown({
 }: CollectionsTableDropdownProps) {
 	const delete_fn = async (id: number) => {
 		try {
-			const data = await deleteCollection(id);
-			toast(`Collection id deleted: ${data.collection_id}`);
+			await deleteCollection(id);
+			toast(`Collection id deleted: ${id}`);
 		} catch (err) {
 			toast(`Error deleting collection: ${err}`);
 		}
