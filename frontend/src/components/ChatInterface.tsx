@@ -56,7 +56,7 @@ export default function ChatInterface({
 	const sendMessage = async () => {
 		if (!query.trim()) return;
 		if (selectedCollectionIds.size === 0) {
-			toast('No collections have been selected');
+			toast.info('No collections have been selected');
 			return;
 		}
 

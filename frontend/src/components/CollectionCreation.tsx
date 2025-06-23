@@ -1,53 +1,31 @@
 import React, { useState } from 'react';
-import { createCollection } from '@/stores/useCollectionStore';
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-	DialogClose,
-} from './ui/dialog';
+import { createCollection, useCollections } from '@/stores/useCollectionStore';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import NameDialog from '@/components/NameDialog';
 
 export default function CollectionCreation() {
-	const [name, setName] = useState<string>('');
+	const [creationOpen, setCreationOpen] = useState(false);
+	const collections = useCollections();
 
 	return (
-		<div className='w-full p-3'>
-			<Dialog>
-				<DialogTrigger asChild>
-					<Button>Create</Button>
-				</DialogTrigger>
-				<DialogContent className='min-w-[500px] min-h-[200px] max-w-none p-8'>
-					<DialogHeader>
-						<DialogTitle>Create Collection</DialogTitle>
-					</DialogHeader>
-
-					<Input
-						type='text'
-						placeholder='Collection Name'
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-							setName(e.target.value);
-						}}
-					/>
-
-					<DialogFooter>
-						<DialogClose asChild>
-							<Button
-								className='mx-auto min-w-[150px]'
-								onClick={() => {
-									createCollection(name);
-								}}
-							>
-								Create
-							</Button>
-						</DialogClose>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
+		<div>
+			<Button
+				onClick={() => setCreationOpen(true)}
+				className='align-middle'
+			>
+				Create
+			</Button>
+			<NameDialog
+				onSubmit={createCollection}
+				title='Create Collection'
+				placeholder='Collection Name'
+				submitText='Create'
+				openState={creationOpen}
+				closeDialog={() => setCreationOpen(false)}
+				disableSubmit={(name: string) =>
+					collections.map((c) => c.name).includes(name)
+				}
+			/>
 		</div>
 	);
 }

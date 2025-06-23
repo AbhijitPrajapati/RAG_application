@@ -33,3 +33,9 @@ class CollectionCreationRequest(BaseModel):
 
 class CollectionCreationResponse(BaseModel):
     collection_id: int
+
+class CollectionRenameRequest(BaseModel):
+    new_name: str
+
+class CollectionBulkDeletionRequest(BaseModel):
+    collection_ids: list[int]

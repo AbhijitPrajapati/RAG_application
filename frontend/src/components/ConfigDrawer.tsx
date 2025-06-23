@@ -47,7 +47,7 @@ export default function ConfigDrawer({
 					<Button className='w-full'>Configurations</Button>
 				</DrawerTrigger>
 
-				<DrawerContent>
+				<DrawerContent aria-describedby={undefined}>
 					<DrawerHeader>
 						<DrawerTitle>Configurations</DrawerTitle>
 					</DrawerHeader>
@@ -80,7 +80,7 @@ export default function ConfigDrawer({
 						</div>
 
 						<div className='flex flex-row mx-auto p-2 gap-x-4'>
-							<DrawerClose>
+							<DrawerClose asChild>
 								<Button variant='outline'>Cancel</Button>
 							</DrawerClose>
 							<Button onClick={resetConfig}>Reset</Button>

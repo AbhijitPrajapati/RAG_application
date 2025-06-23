@@ -37,7 +37,7 @@ export const _deleteCollection = async (id: number) => {
 	return res.status;
 };
 
-export const _uploadFiles = async (files: File[], collectionId: number) => {
+export const uploadFiles = async (files: File[], collectionId: number) => {
 	const formData = new FormData();
 	files.forEach((file) => formData.append('files', file));
 	formData.append('collection_id', collectionId.toString());
@@ -56,7 +56,7 @@ export const _bulkDeleteCollections = async (ids: Array<number>) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(ids),
+		body: JSON.stringify({ collection_ids: ids }),
 	});
 
 	await fetchOkay(res);
@@ -81,4 +81,16 @@ export const _createCollection = async (name: string) => {
 	});
 	await fetchOkay(res);
 	return res.json();
+};
+
+export const _renameCollection = async (id: number, name: string) => {
+	const res = await fetch(`http://localhost:8000/collections/${id}`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ new_name: name }),
+	});
+	await fetchOkay(res);
+	return res.status;
 };

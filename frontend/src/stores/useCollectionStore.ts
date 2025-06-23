@@ -5,6 +5,7 @@ import {
 	_deleteCollection,
 	_bulkDeleteCollections,
 	_createCollection,
+	_renameCollection,
 } from '@/services';
 
 interface CollectionsState {
@@ -40,5 +41,9 @@ export const deleteCollections = async (ids: Array<number>) => {
 };
 export const createCollection = async (name: string) => {
 	await _createCollection(name);
+	useCollectionStore.getState().fetchCollections();
+};
+export const renameCollection = async (collection_id: number, name: string) => {
+	await _renameCollection(collection_id, name);
 	useCollectionStore.getState().fetchCollections();
 };

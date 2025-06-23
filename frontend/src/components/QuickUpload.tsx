@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useCollections } from '@/stores/useCollectionStore';
-import { _uploadFiles } from '@/services';
+import { uploadFiles } from '@/services';
 import { Button } from './ui/button';
 import {
 	Select,
@@ -27,27 +27,22 @@ export default function QuickUpload() {
 	const [collectionId, setCollectionId] = useState<number | null>(null);
 	const collections = useCollections();
 
+	const resetState = () => {
+		setFiles([]);
+		setCollectionId(null);
+	};
+
 	const upload = async () => {
-		if (!collectionId) {
-			toast('Please select a collection');
-			return;
-		}
-
-		if (!files || files.length === 0) {
-			toast('Please select file(s)');
-			return;
-		}
-
 		setUploading(true);
 
 		try {
-			await _uploadFiles(files, collectionId);
+			await uploadFiles(files, collectionId!);
 			const text =
 				files.length === 1 ? files[0].name : `${files.length} files`;
 
-			toast(`${text} uploaded`);
+			toast.success(`${text} uploaded`);
 		} catch (err) {
-			toast(`Error uploading files: ${err}`);
+			toast.error(`Error uploading files: ${err}`);
 		} finally {
 			setUploading(false);
 			if (fileInputRef.current) {
@@ -58,11 +53,14 @@ export default function QuickUpload() {
 
 	return (
 		<div className='w-full p-3'>
-			<Dialog>
+			<Dialog onOpenChange={resetState}>
 				<DialogTrigger asChild>
 					<Button className='w-full'>Quick Upload</Button>
 				</DialogTrigger>
-				<DialogContent className='min-w-[500px] min-h-[200px] max-w-none p-8'>
+				<DialogContent
+					className='min-w-[500px] min-h-[200px] max-w-none p-8'
+					aria-describedby={undefined}
+				>
 					<DialogHeader>
 						<DialogTitle>Upload Files</DialogTitle>
 					</DialogHeader>
@@ -95,7 +93,9 @@ export default function QuickUpload() {
 					<DialogFooter>
 						<Button
 							className='mx-auto min-w-[150px]'
-							disabled={uploading}
+							disabled={
+								!collectionId || !files?.length || uploading
+							}
 							onClick={upload}
 						>
 							Upload
