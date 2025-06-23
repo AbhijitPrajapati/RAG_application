@@ -14,7 +14,7 @@ def build_prompt(chunks, sources, query):
     return out
 
 def query(query, model, db, collection_ids, max_tokens, n_results, temperature):
-    assert db.count() != 0
+    assert db.count() != 0 
 
     result = db.query(query_texts=[query.strip()], n_results=n_results, where={'collection_id': {'$in': collection_ids}})
 

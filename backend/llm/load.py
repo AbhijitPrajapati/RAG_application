@@ -4,7 +4,6 @@ from exllamav2.cache import ExLlamaV2Cache
 from exllamav2.tokenizer.tokenizer import ExLlamaV2Tokenizer
 from exllamav2.generator.streaming import ExLlamaV2StreamingGenerator
 from exllamav2.generator.sampler import ExLlamaV2Sampler
-from typing import Iterator
 
 def load_model():
     '''

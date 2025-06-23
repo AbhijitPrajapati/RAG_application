@@ -11,7 +11,7 @@ class Collection(Base):
     __tablename__ = 'collections'
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
     created_at = Column(DateTime, default=datetime.now, nullable=False)
     last_modified = Column(DateTime, default=datetime.now, nullable=False)
     number_files = Column(Integer, nullable=False, default=0)

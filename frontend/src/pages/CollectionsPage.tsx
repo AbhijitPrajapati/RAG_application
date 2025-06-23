@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { columns } from '@/components/CollectionsTableColumns';
 import { DataTable } from '@/components/DataTable';
-import { useCollections, deleteCollections } from '@/stores/useCollectionStore';
+import { useCollections } from '@/stores/useCollectionStore';
 import {
 	type ColumnFiltersState,
 	getCoreRowModel,
@@ -11,9 +11,9 @@ import {
 	useReactTable,
 } from '@tanstack/react-table';
 import type { Collection } from '@/types';
-import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import CollectionCreation from '@/components/CollectionCreation';
+import CollectionBulkDeletion from '@/components/CollectionBulkDeletion';
 
 export default function CollectionsPage() {
 	const [sorting, setSorting] = useState<SortingState>([]);
@@ -38,22 +38,6 @@ export default function CollectionsPage() {
 		getFilteredRowModel: getFilteredRowModel(),
 	});
 
-	const deleteBulk = async () => {
-		try {
-			const data = await deleteCollections(
-				Object.keys(rowSelection).map(Number)
-			);
-			const text =
-				data.collection_ids.length === 1
-					? `collection ids ${data.uploaded_files[0]}`
-					: `${data.uploaded_files.length} collections`;
-
-			toast(`Deleted ${text}`);
-		} catch (err) {
-			toast(`Error deleting collections: ${err}`);
-		}
-	};
-
 	return (
 		<div className='container mx-auto py-10'>
 			<div className='flex flex-row items-center py-4 gap-x-4'>
@@ -70,8 +54,11 @@ export default function CollectionsPage() {
 					}
 					className='max-w-sm'
 				/>
-				<Button>Create</Button>
-				<Button onClick={deleteBulk}>Delete</Button>
+				<CollectionCreation />
+
+				<CollectionBulkDeletion
+					deletion_ids={Object.keys(rowSelection).map(Number)}
+				/>
 			</div>
 			<DataTable table={table} />
 		</div>

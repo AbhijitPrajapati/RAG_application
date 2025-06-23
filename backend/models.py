@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from datetime import datetime
 
 class Query(BaseModel):
@@ -7,6 +7,16 @@ class Query(BaseModel):
     n_chunks: int
     max_tokens: int
     temperature: float
+
+    @field_validator('query')
+    def query_must_be_non_empty(cls, v):
+        if not v or not v.strip():
+            raise ValueError('Empty query')
+        if len(v.strip()) < 3:
+            raise ValueError('Query too short')
+        if len(v) > 1000:
+            raise ValueError('Query too long')
+        return v
 
 class CollectionResponse(BaseModel):
     id: int
@@ -21,11 +31,8 @@ class CollectionResponse(BaseModel):
 class UploadResponse(BaseModel):
     uploaded_files: list[str]
 
-class CollectionDeletionResponse(BaseModel):
-    collection_id: int
-
-class BulkCollectionDeletionResponse(BaseModel):
-    collection_ids: list[int]
+# class BulkCollectionDeletionResponse(BaseModel):
+#     collection_ids: list[int]
 
 class CollectionCreationResponse(BaseModel):
     collection: CollectionResponse
