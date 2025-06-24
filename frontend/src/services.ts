@@ -1,11 +1,10 @@
 import type { Config } from '@/types';
 
-const fetchOkay = async (res: Response) => {
+const responseOkay = async (res: Response) => {
 	if (!res.ok) {
-		const errorText = await res.text();
-		throw new Error(errorText || `HTTP ${res.status}`);
+		const errorData = await res.json();
+		throw new Error(errorData.detail || `HTTP ${res.status}`);
 	}
-	return res;
 };
 
 export const fetchRAGResponse = async (
@@ -25,7 +24,7 @@ export const fetchRAGResponse = async (
 		}),
 	});
 
-	await fetchOkay(res);
+	await responseOkay(res);
 	return res.body;
 };
 
@@ -33,8 +32,7 @@ export const _deleteCollection = async (id: number) => {
 	const res = await fetch(`http://localhost:8000/collections/${id}`, {
 		method: 'DELETE',
 	});
-	await fetchOkay(res);
-	return res.status;
+	await responseOkay(res);
 };
 
 export const uploadFiles = async (files: File[], collectionId: number) => {
@@ -46,8 +44,7 @@ export const uploadFiles = async (files: File[], collectionId: number) => {
 		method: 'POST',
 		body: formData,
 	});
-	await fetchOkay(res);
-	return res.status;
+	await responseOkay(res);
 };
 
 export const _bulkDeleteCollections = async (ids: Array<number>) => {
@@ -58,16 +55,14 @@ export const _bulkDeleteCollections = async (ids: Array<number>) => {
 		},
 		body: JSON.stringify({ collection_ids: ids }),
 	});
-
-	await fetchOkay(res);
-	return res.status;
+	await responseOkay(res);
 };
 
 export const _getCollections = async () => {
 	const res = await fetch('http://localhost:8000/collections', {
 		method: 'GET',
 	});
-	await fetchOkay(res);
+	await responseOkay(res);
 	return res.json();
 };
 
@@ -79,7 +74,7 @@ export const _createCollection = async (name: string) => {
 		},
 		body: JSON.stringify({ name: name }),
 	});
-	await fetchOkay(res);
+	await responseOkay(res);
 	return res.json();
 };
 
@@ -91,6 +86,5 @@ export const _renameCollection = async (id: number, name: string) => {
 		},
 		body: JSON.stringify({ new_name: name }),
 	});
-	await fetchOkay(res);
-	return res.status;
+	await responseOkay(res);
 };

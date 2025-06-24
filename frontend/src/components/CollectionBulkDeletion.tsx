@@ -24,7 +24,8 @@ export default function CollectionBulkDeletion({
 
 			toast.success(`Deleted ${text}`);
 		} catch (err) {
-			toast.error(`Error deleting collections: ${err}`);
+			if (err instanceof Error)
+				toast.error(`Error deleting collections: ${err.message}`);
 		} finally {
 			setDeleteDialogOpen(false);
 		}

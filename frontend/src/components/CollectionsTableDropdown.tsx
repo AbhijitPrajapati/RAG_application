@@ -34,7 +34,8 @@ export function CollectionsTableDropdown({
 			await deleteCollection(id);
 			toast.success(`Collection id deleted: ${id}`);
 		} catch (err) {
-			toast.error(`Error deleting collection: ${err}`);
+			if (err instanceof Error)
+				toast.error(`Error deleting collection: ${err.message}`);
 		} finally {
 			setDeleteDialogOpen(false);
 		}

@@ -34,7 +34,6 @@ export default function QuickUpload() {
 
 	const upload = async () => {
 		setUploading(true);
-
 		try {
 			await uploadFiles(files, collectionId!);
 			const text =
@@ -42,7 +41,8 @@ export default function QuickUpload() {
 
 			toast.success(`${text} uploaded`);
 		} catch (err) {
-			toast.error(`Error uploading files: ${err}`);
+			if (err instanceof Error)
+				toast.error(`Error uploading files: ${err.message}`);
 		} finally {
 			setUploading(false);
 			if (fileInputRef.current) {
