@@ -1,9 +1,11 @@
-from sqlalchemy import create_engine, Column, String, Integer, DateTime
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker
-from datetime import datetime
+from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, event
+from sqlalchemy.orm import declarative_base, sessionmaker, relationship
+import events
 
-engine = create_engine('sqlite:///./data/collections.db', echo=True)
+from datetime import datetime, timezone
+time_now = lambda: datetime.now(timezone.utc)
+
+engine = create_engine(f'sqlite:///data/sql_store.db', echo=True)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
@@ -12,9 +14,27 @@ class Collection(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False, unique=True)
-    created_at = Column(DateTime, default=datetime.now, nullable=False)
-    last_modified = Column(DateTime, default=datetime.now, nullable=False)
+    created_at = Column(DateTime, default=time_now, nullable=False)
+    last_modified = Column(DateTime, default=time_now, nullable=False)
     number_files = Column(Integer, nullable=False, default=0)
+
+    files = relationship('File', back_populates='collection', cascade='all, delete-orphan')
+
+class File(Base):
+    __tablename__ = 'files'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    collection_id = Column(Integer, ForeignKey('collections.id'), nullable=False)
+    uploaded_at = Column(DateTime, default=time_now, nullable=False)
+    number_chunks = Column(Integer, nullable=False)
+    length = Column(Integer, nullable=False)
+
+    collection = relationship('Collection', back_populates='files')
+
+event.listen(File, 'after_delete', events.file_delete)
+event.listen(File, 'after_insert', events.file_insert)
+event.listen(Collection, 'after_update', events.collection_rename)
 
 def get_db():
     db = SessionLocal()
@@ -24,9 +44,3 @@ def get_db():
         db.close()
 
 # Base.metadata.create_all(bind=engine)
-
-# s = SessionLocal()
-# c = [Collection(name='training'), Collection(name='machine_learning'), Collection(name='misc')]
-# s.add_all(c)
-# s.commit()
-# s.close()

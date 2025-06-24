@@ -76,5 +76,5 @@ def rename_collection(collection_id: int, req: CollectionRenameRequest, sql_db =
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @app.get('/files', response_model=list[FileResponse])
-async def get_files(req: FilesRequest):
-    return {'files': files(app.state.chroma, req.collection_ids)}
+async def get_files(req: FilesRequest, sql_db = Depends(get_db)):
+    return files(sql_db, req.collection_ids)

@@ -1,6 +1,6 @@
 
 from .chunking import chunk_document
-from .sqlalchemy_setup import Collection
+from .sqlalchemy_setup import Collection, File
 from datetime import datetime
 from errors import EmptyFileError, InvalidFileFormatError
 
@@ -41,35 +41,29 @@ async def read_files(files):
     
     return names, contents
 
-def files(chroma_db, collection_ids):
-    # chunks = chroma_db.get(include=['metadatas'], where={'collection_id': 
-    #                                 {'$in': collection_ids}
-    #                                 })
-    # data, ids = chunks['metadatas'], chunks['ids']
-    # for id, m in zip(ids, data): m['id'] = id
-
-    # for d in data:
-        
-
-    # return 
+def files(sql_db, collection_ids):
+    collections = sql_db.query(Collection).filter(Collection.id.in_(collection_ids)).all()
+    files = [file for c in collections for file in c.file]
+    return files
 
 def add_documents(chroma_db, sql_db, texts, filenames, collection_id, chunk_max_words=400, chunk_overlap_sentences=1):
     chunks, metadata = [], []
     
     for text, filename in zip(texts, filenames):
         c = chunk_document(text, chunk_max_words, chunk_overlap_sentences)
+
+        file = File(name=filename, collection_id=collection_id, number_chunks=len(c), length=len(text))
+        sql_db.add(file)
+        sql_db.flush()
+
         chunks.extend(c)
         for chunk in c: 
-            metadata.append({'source': filename, 'collection_id': collection_id, 'date_added': datetime.now().isoformat(), 'length': len(chunk)})
+            metadata.append({'file_id': file.id, 'collection_id': collection_id, 'length': len(chunk)})
     
     id_start = chroma_db.count()
     ids = [str(i) for i in range(id_start, id_start + len(chunks))]
 
     chroma_db.add(documents=chunks, ids=ids, metadatas=metadata)
 
-    sql_db.query(Collection).filter(Collection.id == collection_id).update({
-        Collection.number_files: Collection.number_files + len(texts),
-        Collection.last_modified: datetime.now()
-    })
     sql_db.commit()
 
