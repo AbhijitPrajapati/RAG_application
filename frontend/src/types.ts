@@ -11,6 +11,15 @@ export interface Collection {
 	number_files: number;
 }
 
+export interface File {
+	id: number;
+	name: string;
+	collection_id: number;
+	uploaded_at: string;
+	number_chunks: number;
+	length: number;
+}
+
 export interface Config {
 	n_chunks: number;
 	max_tokens: number;

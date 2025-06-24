@@ -13,13 +13,11 @@ import {
 
 import type { Table as TanstackTable } from '@tanstack/react-table';
 
-import type { Collection } from '@/types';
-
-interface DataTableProps {
-	table: TanstackTable<Collection>;
+interface DataTableProps<TData> {
+	table: TanstackTable<TData>;
 }
 
-export function DataTable({ table }: DataTableProps) {
+export function DataTable<TData>({ table }: DataTableProps<TData>) {
 	return (
 		<>
 			<div className='rounded-md border'>

@@ -32,7 +32,7 @@ class FileResponse(BaseModel):
     id: int
     name: str
     collection_id: int   
-    num_chunks: int     
+    number_chunks: int     
     length: int         
     uploaded_at: datetime 
 

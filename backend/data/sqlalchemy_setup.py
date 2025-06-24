@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, event
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
-import events
+from .event_handlers import *
 
 from datetime import datetime, timezone
 time_now = lambda: datetime.now(timezone.utc)
@@ -32,9 +32,9 @@ class File(Base):
 
     collection = relationship('Collection', back_populates='files')
 
-event.listen(File, 'after_delete', events.file_delete)
-event.listen(File, 'after_insert', events.file_insert)
-event.listen(Collection, 'after_update', events.collection_rename)
+event.listen(File, 'after_delete', file_delete)
+event.listen(File, 'after_insert', file_insert)
+event.listen(Collection, 'after_update', collection_rename)
 
 def get_db():
     db = SessionLocal()

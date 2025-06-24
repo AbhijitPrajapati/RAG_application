@@ -43,7 +43,7 @@ async def read_files(files):
 
 def files(sql_db, collection_ids):
     collections = sql_db.query(Collection).filter(Collection.id.in_(collection_ids)).all()
-    files = [file for c in collections for file in c.file]
+    files = [file for c in collections for file in c.files]
     return files
 
 def add_documents(chroma_db, sql_db, texts, filenames, collection_id, chunk_max_words=400, chunk_overlap_sentences=1):

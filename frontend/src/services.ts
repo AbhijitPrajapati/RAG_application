@@ -88,3 +88,15 @@ export const _renameCollection = async (id: number, name: string) => {
 	});
 	await responseOkay(res);
 };
+
+export const getFiles = async (collection_ids: Array<number>) => {
+	const res = await fetch('http://localhost:8000/files', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ collection_ids: collection_ids }),
+	});
+	await responseOkay(res);
+	return res.json();
+};
