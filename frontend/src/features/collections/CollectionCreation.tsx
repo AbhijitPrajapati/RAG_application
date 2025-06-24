@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createCollection, useCollections } from '@/stores/useCollectionStore';
 import { Button } from '@/components/ui/button';
-import NameDialog from '@/components/NameDialog';
+import NameDialog from './NameDialog';
 
 export default function CollectionCreation() {
 	const [creationOpen, setCreationOpen] = useState(false);

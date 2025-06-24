@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import ChatInterface from '@/components/ChatInterface';
-import CollectionSelection from '@/components/CollectionSelection';
-import ConfigDrawer from '@/components/ConfigDrawer';
-import QuickUpload from '@/components/QuickUpload';
+import ChatInterface from '@/features/chat/ChatInterface';
+import CollectionSelection from '@/features/collections/CollectionSelection';
+import ConfigDrawer from '@/features/config/ConfigDrawer';
+import QuickUpload from '@/features/upload/QuickUpload';
 
 import { Button } from '@/components/ui/button';
 import type { Message, Config } from '@/types';

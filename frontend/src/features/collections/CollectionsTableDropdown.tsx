@@ -12,12 +12,12 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Collection } from '@/types';
 import { ConfirmationDialog } from '@/components/ConfimationDialog';
-import NameDialog from '@/components/NameDialog';
+import NameDialog from './NameDialog';
 interface CollectionsTableDropdownProps {
 	collection: Collection;
 }

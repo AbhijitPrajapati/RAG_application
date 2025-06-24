@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { columns } from '@/components/CollectionsTableColumns';
+import { columns } from '@/features/collections/CollectionsTableColumns';
 import { DataTable } from '@/components/DataTable';
 import { useCollections } from '@/stores/useCollectionStore';
 import {
@@ -12,8 +12,8 @@ import {
 } from '@tanstack/react-table';
 import type { Collection } from '@/types';
 import { Input } from '@/components/ui/input';
-import CollectionCreation from '@/components/CollectionCreation';
-import CollectionBulkDeletion from '@/components/CollectionBulkDeletion';
+import CollectionCreation from '@/features/collections/CollectionCreation';
+import CollectionBulkDeletion from '@/features/collections/CollectionBulkDeletion';
 
 export default function CollectionsPage() {
 	const [sorting, setSorting] = useState<SortingState>([]);

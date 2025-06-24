@@ -7,7 +7,7 @@ import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CollectionsTableDropdown } from '@/components/CollectionsTableDropdown';
+import { CollectionsTableDropdown } from './CollectionsTableDropdown';
 
 export const columns: ColumnDef<Collection>[] = [
 	{

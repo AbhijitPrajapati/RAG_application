@@ -1,16 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { useCollections } from '@/stores/useCollectionStore';
 import { uploadFiles } from '@/services';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from './ui/select';
+} from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Input } from './ui/input';
+import { Input } from '@/components/ui/input';
 import {
 	Dialog,
 	DialogContent,
@@ -18,7 +18,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from './ui/dialog';
+} from '@/components/ui/dialog';
 
 export default function QuickUpload() {
 	const [files, setFiles] = useState<File[]>([]);

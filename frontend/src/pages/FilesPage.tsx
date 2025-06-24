@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import CollectionSelection from '@/components/CollectionSelection';
-import { getFiles } from '@/services';
+import CollectionSelection from '@/features/collections/CollectionSelection';
+import useFiles from '@/hooks/useFiles';
 import type { File } from '@/types';
 import {
 	type SortingState,
@@ -11,7 +11,7 @@ import {
 	getCoreRowModel,
 	getFilteredRowModel,
 } from '@tanstack/react-table';
-import { columns } from '@/components/FileTableColumns';
+import { columns } from '@/features/files/FileTableColumns';
 import { DataTable } from '@/components/DataTable';
 
 export default function FilesPage() {
@@ -36,13 +36,7 @@ export default function FilesPage() {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [rowSelection, setRowSelection] = useState({});
 
-	const [data, setData] = useState<Array<File>>([]);
-	const fetchData = async () => {
-		setData(await getFiles(Array.from(collectionIds)));
-	};
-	useEffect(() => {
-		fetchData();
-	}, []);
+	const data = useFiles(collectionIds);
 
 	const table = useReactTable({
 		data,

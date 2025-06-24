@@ -1,7 +1,7 @@
 import React from 'react';
-import { Slider } from './ui/slider';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface ConfigSliderProps {
 	min: number;
@@ -33,7 +33,7 @@ export default function ConfigSlider({
 						min={min}
 						max={max}
 						step={step}
-						onValueChange={(v) => setValue(v[0])}
+						onValueChange={(v: Array<number>) => setValue(v[0])}
 						className='flex-1'
 					/>
 					<div className='w-[40px] text-sm text-muted-foreground m-2'>
