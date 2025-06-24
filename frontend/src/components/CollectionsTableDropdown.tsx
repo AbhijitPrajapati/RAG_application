@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import {
 	deleteCollection,
 	renameCollection,
@@ -29,10 +29,12 @@ export function CollectionsTableDropdown({
 	const [renameOpen, setRenameOpen] = useState(false);
 	const collections = useCollections();
 
-	const delete_fn = async (id: number) => {
+	const navigate = useNavigate();
+
+	const delete_fn = async () => {
 		try {
-			await deleteCollection(id);
-			toast.success(`Collection id deleted: ${id}`);
+			await deleteCollection(collection.id);
+			toast.success(`Deleted ${collection.name}`);
 		} catch (err) {
 			if (err instanceof Error)
 				toast.error(`Error deleting collection: ${err.message}`);
@@ -51,7 +53,13 @@ export function CollectionsTableDropdown({
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end'>
-					<DropdownMenuItem>Manage Collection</DropdownMenuItem>
+					<DropdownMenuItem
+						onSelect={() =>
+							navigate(`/files?initial_id=${collection.id}`)
+						}
+					>
+						Manage Collection
+					</DropdownMenuItem>
 					<DropdownMenuItem onSelect={() => setRenameOpen(true)}>
 						Rename
 					</DropdownMenuItem>
@@ -63,7 +71,7 @@ export function CollectionsTableDropdown({
 				</DropdownMenuContent>
 			</DropdownMenu>
 			<ConfirmationDialog
-				onConfirm={() => delete_fn(collection.id)}
+				onConfirm={delete_fn}
 				openState={deleteDialogOpen}
 				closeDialog={() => setDeleteDialogOpen(false)}
 			/>

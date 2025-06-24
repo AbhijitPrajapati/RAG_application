@@ -28,6 +28,16 @@ class CollectionResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class FileResponse(BaseModel):
+    name: str
+    collection_id: int   # 
+    num_chunks: int      # len(chunks where chunks.source = filename)
+    length: int          # sum(chunks where chunks.source = filename)
+    date_added: datetime # chunk.date_added
+    
+class FilesRequest(BaseModel):
+    collection_ids: list[int]
+
 class CollectionCreationRequest(BaseModel):
     name: str
 

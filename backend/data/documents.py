@@ -41,18 +41,26 @@ async def read_files(files):
     
     return names, contents
 
-def files(chroma_db, collection_id):
-    m = chroma_db.get(include=['metadatas'], where={'collection_id': collection_id})['metadatas']
-    return set([e['source'] for e in m])
+def files(chroma_db, collection_ids):
+    # chunks = chroma_db.get(include=['metadatas'], where={'collection_id': 
+    #                                 {'$in': collection_ids}
+    #                                 })
+    # data, ids = chunks['metadatas'], chunks['ids']
+    # for id, m in zip(ids, data): m['id'] = id
+
+    # for d in data:
+        
+
+    # return 
 
 def add_documents(chroma_db, sql_db, texts, filenames, collection_id, chunk_max_words=400, chunk_overlap_sentences=1):
     chunks, metadata = [], []
     
     for text, filename in zip(texts, filenames):
-        c, m = chunk_document(text, chunk_max_words, chunk_overlap_sentences)
-        for meta in m: meta.update({'source': filename, 'collection_id': collection_id})
+        c = chunk_document(text, chunk_max_words, chunk_overlap_sentences)
         chunks.extend(c)
-        metadata.extend(m) 
+        for chunk in c: 
+            metadata.append({'source': filename, 'collection_id': collection_id, 'date_added': datetime.now().isoformat(), 'length': len(chunk)})
     
     id_start = chroma_db.count()
     ids = [str(i) for i in range(id_start, id_start + len(chunks))]

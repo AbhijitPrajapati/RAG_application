@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import ChatInterface from '@/components/ChatInterface';
 import CollectionSelection from '@/components/CollectionSelection';
@@ -39,6 +39,8 @@ export default function ChatPage() {
 		setSelectedCollectionIds(newSet);
 	};
 
+	const navigate = useNavigate();
+
 	return (
 		<div className='flex'>
 			<div className='flex flex-col w-2/10 items-center p-8'>
@@ -48,8 +50,11 @@ export default function ChatPage() {
 				/>
 				<QuickUpload />
 				<div className='w-full p-3'>
-					<Button className='w-full' asChild>
-						<Link to='/collections'>Manage Collections</Link>
+					<Button
+						className='w-full'
+						onClick={() => navigate('/collections')}
+					>
+						Manage Collections
 					</Button>
 				</div>
 				<ConfigDrawer

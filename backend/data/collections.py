@@ -1,5 +1,4 @@
 from .sqlalchemy_setup import Collection
-from sqlalchemy.exc import IntegrityError
 
 def get(sql_db):
     return sql_db.query(Collection).all()

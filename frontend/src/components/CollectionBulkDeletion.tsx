@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { deleteCollections } from '@/stores/useCollectionStore';
+import { deleteCollections, useCollections } from '@/stores/useCollectionStore';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 
@@ -14,12 +14,17 @@ export default function CollectionBulkDeletion({
 }: CollectionBulkDeletionProps) {
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
+	const allCollections = useCollections();
+	const deletion_names = allCollections
+		.filter((c) => deletion_ids.includes(c.id))
+		.map((c) => c.name);
+
 	const deleteBulk = async () => {
 		try {
 			await deleteCollections(deletion_ids);
 			const text =
 				deletion_ids.length === 1
-					? `collection ids ${deletion_ids}`
+					? deletion_names.at(0)
 					: `${deletion_ids.length} collections`;
 
 			toast.success(`Deleted ${text}`);

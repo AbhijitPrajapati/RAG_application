@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from chromadb import PersistentClient
 
-from models import Query, CollectionResponse, CollectionCreationRequest, CollectionCreationResponse, CollectionRenameRequest, CollectionBulkDeletionRequest
-from data.documents import add_documents, read_files
+from models import Query, CollectionResponse, CollectionCreationRequest, CollectionCreationResponse, CollectionRenameRequest, CollectionBulkDeletionRequest, FilesRequest, FileResponse
+from data.documents import add_documents, read_files, files
 from data.collections import get, delete, create, rename
 from llm.load import load_model
 from rag.query_engine import query
@@ -75,6 +75,6 @@ def rename_collection(collection_id: int, req: CollectionRenameRequest, sql_db =
     rename(collection_id, req.new_name, sql_db)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-# @app.get('/files')
-# async def get_files(collection_name: str):
-#     return {'files': files(app.state.chroma, collection_name)}
+@app.get('/files', response_model=list[FileResponse])
+async def get_files(req: FilesRequest):
+    return {'files': files(app.state.chroma, req.collection_ids)}

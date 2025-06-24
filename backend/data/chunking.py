@@ -2,10 +2,9 @@ from nltk.tokenize import sent_tokenize
 
 def chunk_document(text, chunk_max_words, chunk_overlap_sentences):
     '''
-    Splits document into chunks with maximum side and overlap. Returns chunks and metadata.
+    Splits document into chunks with maximum side and overlap
     '''
     chunks = []
-    metadata = []
     current = []
     word_count = 0
     
@@ -16,12 +15,6 @@ def chunk_document(text, chunk_max_words, chunk_overlap_sentences):
 
         if word_count + num_words > chunk_max_words:
             chunks.append(' '.join(current))
-            
-            metadata.append({
-                'chunk_index': len(chunks) - 1,  
-                'length': sum(len(se) for se in current),
-            })
-
             current = current[-chunk_overlap_sentences:]
             word_count = sum(len(se.split()) for se in current)
         current.append(s)
@@ -30,9 +23,4 @@ def chunk_document(text, chunk_max_words, chunk_overlap_sentences):
     if len(current) > 0:
         chunks.append(' '.join(current))
     
-        metadata.append({
-            'chunk_index': len(chunks) - 1,  
-            'length': sum(len(se) for se in current),
-        })
-            
-    return chunks, metadata
+    return chunks
