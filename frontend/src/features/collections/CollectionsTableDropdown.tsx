@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import type { Collection } from '@/types';
 import { ConfirmationDialog } from '@/components/ConfimationDialog';
 import NameDialog from './NameDialog';
+import UploadDialog from '@/features/upload/UploadDialog';
 interface CollectionsTableDropdownProps {
 	collection: Collection;
 }
@@ -27,6 +28,7 @@ export function CollectionsTableDropdown({
 }: CollectionsTableDropdownProps) {
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [renameOpen, setRenameOpen] = useState(false);
+	const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
 	const collections = useCollections();
 
 	const navigate = useNavigate();
@@ -60,6 +62,11 @@ export function CollectionsTableDropdown({
 					>
 						Manage Collection
 					</DropdownMenuItem>
+					<DropdownMenuItem
+						onSelect={() => setUploadDialogOpen(true)}
+					>
+						Upload
+					</DropdownMenuItem>
 					<DropdownMenuItem onSelect={() => setRenameOpen(true)}>
 						Rename
 					</DropdownMenuItem>
@@ -87,6 +94,11 @@ export function CollectionsTableDropdown({
 				disableSubmit={(name: string) =>
 					collections.map((c) => c.name).includes(name)
 				}
+			/>
+			<UploadDialog
+				openState={uploadDialogOpen}
+				closeDialog={() => setUploadDialogOpen(false)}
+				initial_id={collection.id}
 			/>
 		</>
 	);

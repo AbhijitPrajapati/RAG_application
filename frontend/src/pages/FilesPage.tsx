@@ -13,6 +13,7 @@ import {
 } from '@tanstack/react-table';
 import { columns } from '@/features/files/FileTableColumns';
 import { DataTable } from '@/components/DataTable';
+import { Button } from '@/components/ui/button';
 
 export default function FilesPage() {
 	const [searchParams] = useSearchParams();
@@ -56,16 +57,17 @@ export default function FilesPage() {
 	});
 
 	return (
-		<div className='flex'>
-			<div className='w-2/10'>
+		<div className='container mx-auto py-10'>
+			<div className='flex flex-row items-center py-4 gap-x-4'>
 				<CollectionSelection
 					selectedCollectionIds={collectionIds}
 					toggleSelectedCollection={toggleCollection}
 				/>
+				<Button className='w-1/4'>Text</Button>
+				<Button className='w-1/4'>Text</Button>
+				<Button className='w-1/4'>Text</Button>
 			</div>
-			<div className='w-8/10'>
-				<DataTable table={table} />
-			</div>
+			<DataTable table={table} />
 		</div>
 	);
 }

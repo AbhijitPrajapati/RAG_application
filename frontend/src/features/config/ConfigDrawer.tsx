@@ -41,7 +41,7 @@ export default function ConfigDrawer({
 	);
 
 	return (
-		<div className='w-full p-3'>
+		<div className='w-full'>
 			<Drawer>
 				<DrawerTrigger asChild>
 					<Button className='w-full'>Configurations</Button>
