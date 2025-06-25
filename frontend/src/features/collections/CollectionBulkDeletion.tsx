@@ -31,8 +31,6 @@ export default function CollectionBulkDeletion({
 		} catch (err) {
 			if (err instanceof Error)
 				toast.error(`Error deleting collections: ${err.message}`);
-		} finally {
-			setDeleteDialogOpen(false);
 		}
 	};
 
@@ -47,36 +45,8 @@ export default function CollectionBulkDeletion({
 			<ConfirmationDialog
 				onConfirm={deleteBulk}
 				openState={deleteDialogOpen}
-				closeDialog={() => setDeleteDialogOpen(false)}
+				setOpenState={setDeleteDialogOpen}
 			/>
 		</div>
 	);
 }
-
-// 	<Dialog>
-// 		<DialogTrigger asChild>
-// 			<Button disabled={deletion_ids.length == 0}>Delete</Button>
-// 		</DialogTrigger>
-// 		<DialogContent className='min-w-[500px] min-h-[200px] max-w-none p-8'>
-// 			<DialogHeader>
-// 				<DialogTitle>Are You Sure?</DialogTitle>
-// 			</DialogHeader>
-
-// 			<DialogFooter>
-// 				<DialogClose asChild>
-// 					<Button
-// 						className='mx-auto min-w-[150px]'
-// 						onClick={deleteBulk}
-// 					>
-// 						Delete
-// 					</Button>
-// 					<Button
-// 						className='mx-auto min-w-[150px]'
-// 						variant='outline'
-// 					>
-// 						Cancel
-// 					</Button>
-// 				</DialogClose>
-// 			</DialogFooter>
-// 		</DialogContent>
-// 	</Dialog>

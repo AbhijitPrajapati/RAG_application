@@ -40,8 +40,6 @@ export function CollectionsTableDropdown({
 		} catch (err) {
 			if (err instanceof Error)
 				toast.error(`Error deleting collection: ${err.message}`);
-		} finally {
-			setDeleteDialogOpen(false);
 		}
 	};
 
@@ -67,6 +65,7 @@ export function CollectionsTableDropdown({
 					>
 						Upload
 					</DropdownMenuItem>
+
 					<DropdownMenuItem onSelect={() => setRenameOpen(true)}>
 						Rename
 					</DropdownMenuItem>
@@ -80,7 +79,7 @@ export function CollectionsTableDropdown({
 			<ConfirmationDialog
 				onConfirm={delete_fn}
 				openState={deleteDialogOpen}
-				closeDialog={() => setDeleteDialogOpen(false)}
+				setOpenState={setDeleteDialogOpen}
 			/>
 			<NameDialog
 				onSubmit={(name: string) =>
@@ -90,14 +89,14 @@ export function CollectionsTableDropdown({
 				placeholder='Collection Name'
 				submitText='Rename'
 				openState={renameOpen}
-				closeDialog={() => setRenameOpen(false)}
+				setOpenState={setRenameOpen}
 				disableSubmit={(name: string) =>
 					collections.map((c) => c.name).includes(name)
 				}
 			/>
 			<UploadDialog
 				openState={uploadDialogOpen}
-				closeDialog={() => setUploadDialogOpen(false)}
+				setOpenState={setUploadDialogOpen}
 				initial_id={collection.id}
 			/>
 		</>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
@@ -11,30 +12,30 @@ import { Button } from '@/components/ui/button';
 interface ConfirmationDialogProps {
 	onConfirm: () => void;
 	openState: boolean;
-	closeDialog: () => void;
+	setOpenState: (open: boolean) => void;
 }
 
 export function ConfirmationDialog({
 	onConfirm,
 	openState,
-	closeDialog,
+	setOpenState,
 }: ConfirmationDialogProps) {
 	return (
-		<Dialog open={openState}>
+		<Dialog open={openState} onOpenChange={setOpenState}>
 			<DialogContent showCloseButton={false} aria-describedby={undefined}>
 				<DialogHeader>
 					<DialogTitle>Are you sure?</DialogTitle>
 				</DialogHeader>
 				<p>This action cannot be undone.</p>
 				<DialogFooter>
-					<Button variant='outline' onClick={closeDialog}>
-						Cancel
-					</Button>
+					<DialogClose asChild>
+						<Button variant='outline'>Cancel</Button>
+					</DialogClose>
 					<Button
 						variant='destructive'
 						onClick={() => {
 							onConfirm();
-							closeDialog();
+							setOpenState(false);
 						}}
 					>
 						Confirm

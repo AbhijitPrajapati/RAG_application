@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
@@ -22,13 +23,13 @@ import { X } from 'lucide-react';
 
 interface UploadDialogProps {
 	openState: boolean;
-	closeDialog: () => void;
+	setOpenState: (open: boolean) => void;
 	initial_id?: number;
 }
 
 export default function UploadDialog({
 	openState,
-	closeDialog,
+	setOpenState,
 	initial_id,
 }: UploadDialogProps) {
 	const [files, setFiles] = useState<File[]>([]);
@@ -61,11 +62,12 @@ export default function UploadDialog({
 				fileInputRef.current.value = '';
 			}
 			setFiles([]);
+			setOpenState(false);
 		}
 	};
 
 	return (
-		<Dialog open={openState}>
+		<Dialog open={openState} onOpenChange={setOpenState}>
 			<DialogContent
 				className='min-w-[500px] min-h-[200px] max-w-none p-8'
 				aria-describedby={undefined}
@@ -73,16 +75,15 @@ export default function UploadDialog({
 			>
 				<DialogHeader>
 					<DialogTitle>Upload Files</DialogTitle>
-					<Button
-						variant='ghost'
-						className='absolute right-4 top-4 p-2 rounded-full'
-						onClick={() => {
-							resetState();
-							closeDialog();
-						}}
-					>
-						<X className='h-4 w-4' />
-					</Button>
+					<DialogClose asChild>
+						<Button
+							variant='ghost'
+							className='absolute right-4 top-4 p-2 rounded-full'
+							onClick={resetState}
+						>
+							<X className='h-4 w-4' />
+						</Button>
+					</DialogClose>
 				</DialogHeader>
 
 				<Select

@@ -55,26 +55,22 @@ export default function ChatPage() {
 				</Button>
 				<UploadDialog
 					openState={openUpload}
-					closeDialog={() => setOpenUpload(false)}
+					setOpenState={setOpenUpload}
 				/>
-				<div className='w-full'>
-					<Button
-						className='w-full'
-						onClick={() => navigate('/collections')}
-					>
-						Manage Collections
-					</Button>
-				</div>
+				<Button
+					className='w-full'
+					onClick={() => navigate('/collections')}
+				>
+					Manage Collections
+				</Button>
 				<ConfigDrawer
 					config={config}
 					updateConfig={updateConfig}
 					resetConfig={resetConfig}
 				/>
-				<div className='w-full'>
-					<Button onClick={() => setMessages([])} className='w-full'>
-						Clear Chat
-					</Button>
-				</div>
+				<Button onClick={() => setMessages([])} className='w-full'>
+					Clear Chat
+				</Button>
 			</div>
 			<ChatInterface
 				messages={messages}

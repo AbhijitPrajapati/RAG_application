@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { flexRender } from '@tanstack/react-table';
+import {
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getSortedRowModel,
+	useReactTable,
+} from '@tanstack/react-table';
 
 import {
 	Table,
@@ -11,15 +17,50 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 
-import type { Table as TanstackTable } from '@tanstack/react-table';
+import type {
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	Table as TanStackTable,
+} from '@tanstack/react-table';
+import type { Collection, File } from '@/types';
 
-interface DataTableProps<TData> {
-	table: TanstackTable<TData>;
+interface DataTableProps<T extends Collection | File> {
+	data: Array<T>;
+	columns: Array<ColumnDef<T>>;
+	renderControls: (table: TanStackTable<T>) => React.ReactNode;
 }
 
-export function DataTable<TData>({ table }: DataTableProps<TData>) {
+export function DataTable<T extends Collection | File>({
+	data,
+	columns,
+	renderControls,
+}: DataTableProps<T>) {
+	const [sorting, setSorting] = useState<SortingState>([]);
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+	const [rowSelection, setRowSelection] = useState({});
+	const table = useReactTable({
+		data,
+		columns,
+		state: {
+			sorting,
+			columnFilters,
+			rowSelection,
+		},
+		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
+		onRowSelectionChange: setRowSelection,
+		getRowId: (row: T) => row.id.toString(),
+		getSortedRowModel: getSortedRowModel(),
+		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+	});
+
 	return (
-		<>
+		<div className='container mx-auto py-10'>
+			<div className='flex flex-row items-center py-4 gap-x-4'>
+				{renderControls(table)}
+			</div>
 			<div className='rounded-md border'>
 				<Table>
 					<TableHeader>
@@ -73,6 +114,6 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
 					</TableBody>
 				</Table>
 			</div>
-		</>
+		</div>
 	);
 }

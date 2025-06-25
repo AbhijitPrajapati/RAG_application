@@ -3,21 +3,17 @@ import { useSearchParams } from 'react-router-dom';
 import CollectionSelection from '@/features/collections/CollectionSelection';
 import useFiles from '@/hooks/useFiles';
 import type { File } from '@/types';
-import {
-	type SortingState,
-	type ColumnFiltersState,
-	useReactTable,
-	getSortedRowModel,
-	getCoreRowModel,
-	getFilteredRowModel,
-} from '@tanstack/react-table';
+import { type Table } from '@tanstack/react-table';
 import { columns } from '@/features/files/FileTableColumns';
 import { DataTable } from '@/components/DataTable';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import UploadDialog from '@/features/upload/UploadDialog';
 
 export default function FilesPage() {
 	const [searchParams] = useSearchParams();
 	const initialId = Number(searchParams.get('initial_id'));
+	const [openUpload, setOpenUpload] = useState(false);
 
 	const [collectionIds, setCollectionIds] = useState<Set<number>>(
 		new Set([initialId])
@@ -33,41 +29,41 @@ export default function FilesPage() {
 		setCollectionIds(newSet);
 	};
 
-	const [sorting, setSorting] = useState<SortingState>([]);
-	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-	const [rowSelection, setRowSelection] = useState({});
-
 	const data = useFiles(collectionIds);
 
-	const table = useReactTable({
-		data,
-		columns,
-		state: {
-			sorting,
-			columnFilters,
-			rowSelection,
-		},
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		onRowSelectionChange: setRowSelection,
-		getRowId: (row: File) => row.id.toString(),
-		getSortedRowModel: getSortedRowModel(),
-		getCoreRowModel: getCoreRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-	});
-
 	return (
-		<div className='container mx-auto py-10'>
-			<div className='flex flex-row items-center py-4 gap-x-4'>
-				<CollectionSelection
-					selectedCollectionIds={collectionIds}
-					toggleSelectedCollection={toggleCollection}
-				/>
-				<Button className='w-1/4'>Text</Button>
-				<Button className='w-1/4'>Text</Button>
-				<Button className='w-1/4'>Text</Button>
-			</div>
-			<DataTable table={table} />
-		</div>
+		<DataTable
+			data={data}
+			columns={columns}
+			renderControls={(table: Table<File>) => (
+				<>
+					<CollectionSelection
+						selectedCollectionIds={collectionIds}
+						toggleSelectedCollection={toggleCollection}
+					/>
+					<Input
+						placeholder='Search'
+						value={
+							(table
+								.getColumn('name')
+								?.getFilterValue() as string) ?? ''
+						}
+						onChange={(event) =>
+							table
+								.getColumn('name')
+								?.setFilterValue(event.target.value)
+						}
+						className='max-w-sm'
+					/>
+					<Button className='' onClick={() => setOpenUpload(true)}>
+						Upload
+					</Button>
+					<UploadDialog
+						openState={openUpload}
+						setOpenState={setOpenUpload}
+					/>
+				</>
+			)}
+		/>
 	);
 }

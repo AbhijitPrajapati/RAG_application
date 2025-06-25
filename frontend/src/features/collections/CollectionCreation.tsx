@@ -21,7 +21,7 @@ export default function CollectionCreation() {
 				placeholder='Collection Name'
 				submitText='Create'
 				openState={creationOpen}
-				closeDialog={() => setCreationOpen(false)}
+				setOpenState={setCreationOpen}
 				disableSubmit={(name: string) =>
 					collections.map((c) => c.name).includes(name)
 				}
