@@ -78,3 +78,8 @@ def delete_documents(chroma_db, sql_db, file_ids):
     files = sql_db.query(File).filter(File.id.in_(file_ids)).all()
     for f in files: sql_db.delete(f)
     sql_db.commit()
+
+def get_chunks(chroma_db, file_id):
+    chunks = chroma_db.get(where={'file_id': file_id}, include=['documents'])
+    return ''.join(chunks['documents'])
+    

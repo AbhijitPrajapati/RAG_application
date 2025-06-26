@@ -1,15 +1,19 @@
 import React from 'react';
 import { columns } from '@/features/collections/CollectionsTableColumns';
 import { DataTable } from '@/components/DataTable';
-import { useCollections } from '@/stores/useCollectionStore';
+import {
+	useCollections,
+	useDeleteCollections,
+} from '@/stores/useCollectionStore';
 import type { Collection } from '@/types';
 import { Input } from '@/components/ui/input';
 import CollectionCreation from '@/features/collections/CollectionCreation';
-import CollectionBulkDeletion from '@/features/collections/CollectionBulkDeletion';
+import BulkDeletion from '@/components/BulkDeletion';
 import type { Table } from '@tanstack/react-table';
 
 export default function CollectionsPage() {
 	const data = useCollections();
+	const deleteCollections = useDeleteCollections();
 
 	return (
 		<DataTable
@@ -33,14 +37,14 @@ export default function CollectionsPage() {
 					/>
 					<CollectionCreation />
 
-					<CollectionBulkDeletion
-						deletion_ids={
-							new Set(
-								Object.keys(table.getState().rowSelection).map(
-									Number
-								)
-							)
-						}
+					<BulkDeletion
+						deletion_items={data.filter((c) =>
+							Object.keys(table.getState().rowSelection)
+								.map(Number)
+								.includes(c.id)
+						)}
+						item_type='collections'
+						deletion_func={deleteCollections}
 					/>
 				</>
 			)}

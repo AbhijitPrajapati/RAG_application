@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { uploadFiles } from '@/services';
+import { useUploadFiles } from '@/stores/useFilesStore';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/dialog';
 import { X } from 'lucide-react';
 import CollectionSelection from '@/features/collections/CollectionSelection';
-import { useFetchCollections } from '@/stores/useCollectionStore';
 
 interface UploadDialogProps {
 	openState: boolean;
@@ -29,15 +28,15 @@ export default function UploadDialog({
 	const [files, setFiles] = useState<File[]>([]);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [uploading, setUploading] = useState<boolean>(false);
-	const [collectionId, setCollectionId] = useState<number | null>(
-		initial_id ?? null
+	const [collectionId, setCollectionId] = useState<number | undefined>(
+		initial_id
 	);
-	const updateCollections = useFetchCollections();
+	const uploadFiles = useUploadFiles();
 
 	const openChange = (open: boolean) => {
 		if (!open) {
 			setFiles([]);
-			setCollectionId(null);
+			setCollectionId(initial_id);
 		}
 		setOpenState(open);
 	};
@@ -45,10 +44,9 @@ export default function UploadDialog({
 	const upload = async () => {
 		setUploading(true);
 		try {
-			await uploadFiles(files, collectionId!);
+			await uploadFiles(collectionId!, files);
 			const text =
 				files.length === 1 ? files[0].name : `${files.length} files`;
-
 			toast.success(`${text} uploaded`);
 		} catch (err) {
 			if (err instanceof Error)
@@ -59,7 +57,6 @@ export default function UploadDialog({
 				fileInputRef.current.value = '';
 			}
 			setFiles([]);
-			updateCollections();
 		}
 	};
 
@@ -84,7 +81,7 @@ export default function UploadDialog({
 
 				<CollectionSelection
 					setSelectedId={setCollectionId}
-					defaultId={collectionId ?? undefined}
+					defaultId={collectionId}
 					className='w-full'
 				/>
 

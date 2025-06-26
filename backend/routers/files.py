@@ -1,15 +1,14 @@
 from fastapi import APIRouter, status, File, UploadFile, Depends, Request
-from models import UploadFilesResposne, FileResponse, FileBulkDeletionRequest
+from models import UploadFilesResponse, FileResponse, FileBulkDeletionRequest, DocumentResponse
 from data.sqlalchemy_setup import get_db
-from data.documents import add_documents, read_files, files, delete_documents
+from data.documents import add_documents, read_files, files, delete_documents, get_chunks
 
 files_router = APIRouter()
 
-@files_router.post('/collections/{collection_id}/files', response_model=UploadFilesResposne, status_code=status.HTTP_201_CREATED)
+@files_router.post('/collections/{collection_id}/files', response_model=UploadFilesResponse, status_code=status.HTTP_201_CREATED)
 async def upload_files(request: Request, collection_id: int, files: list[UploadFile] = File(...), sql_db = Depends(get_db)):
     names, contents = await read_files(files)
-    file_ids = add_documents(request.app.state.chroma, sql_db, contents, names, collection_id)
-    return UploadFilesResposne(files_ids=file_ids)
+    return UploadFilesResponse(files_ids=add_documents(request.app.state.chroma, sql_db, contents, names, collection_id))
 
 @files_router.get('/collections/{collection_id}/files', response_model=list[FileResponse])
 async def get_files(collection_id: int, sql_db = Depends(get_db)):
@@ -20,7 +19,11 @@ async def delete_file(file_id: int, request: Request, sql_db = Depends(get_db)):
     delete_documents(request.app.state.chroma, sql_db, [file_id])
     return
 
-files_router.post('/files/bulk-delete', status_code=status.HTTP_204_NO_CONTENT)
+@files_router.post('/files/bulk-delete', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_files_bulk(req: FileBulkDeletionRequest, request: Request, sql_db= Depends(get_db)):
     delete_documents(request.app.state.chroma, sql_db, req.file_ids)
     return
+
+@files_router.get('/files/{file_id}', response_model=DocumentResponse)
+async def get_document(file_id: int, request: Request):
+    return DocumentResponse(document=get_chunks(request.app.state.chroma, file_id))

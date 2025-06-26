@@ -1,16 +1,15 @@
 import { create } from 'zustand';
 import type { Collection } from '@/types';
 import {
-	_getCollections,
-	_deleteCollection,
-	_bulkDeleteCollections,
-	_createCollection,
-	_renameCollection,
+	getCollections,
+	deleteCollection,
+	bulkDeleteCollections,
+	createCollection,
+	renameCollection,
 } from '@/services';
 
 interface CollectionsState {
 	collections: Collection[];
-	isLoading: boolean;
 	fetchCollections: () => void;
 	deleteCollection: (id: number) => void;
 	deleteCollections: (ids: Array<number>) => void;
@@ -20,28 +19,25 @@ interface CollectionsState {
 
 const useCollectionStore = create<CollectionsState>((set, get) => ({
 	collections: [],
-	isLoading: false,
 
 	fetchCollections: async () => {
-		set({ isLoading: true });
-		const data = await _getCollections();
+		const data = await getCollections();
 		set({ collections: data });
-		set({ isLoading: false });
 	},
 	deleteCollection: async (id: number) => {
-		await _deleteCollection(id);
+		await deleteCollection(id);
 		get().fetchCollections();
 	},
 	deleteCollections: async (ids: Array<number>) => {
-		await _bulkDeleteCollections(ids);
+		await bulkDeleteCollections(ids);
 		get().fetchCollections();
 	},
 	createCollection: async (name: string) => {
-		await _createCollection(name);
+		await createCollection(name);
 		get().fetchCollections();
 	},
 	renameCollection: async (collection_id: number, name: string) => {
-		await _renameCollection(collection_id, name);
+		await renameCollection(collection_id, name);
 		get().fetchCollections();
 	},
 }));

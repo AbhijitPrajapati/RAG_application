@@ -93,12 +93,8 @@ export const columns: ColumnDef<Collection>[] = [
 	},
 	{
 		id: 'actions',
-		cell: ({ row }) => {
-			return (
-				<CollectionsTableDropdown
-					collection={row.original}
-				></CollectionsTableDropdown>
-			);
-		},
+		cell: ({ row }) => (
+			<CollectionsTableDropdown collection={row.original} />
+		),
 	},
 ];

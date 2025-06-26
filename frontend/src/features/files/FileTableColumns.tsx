@@ -7,6 +7,7 @@ import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import FilesTableDropdown from '@/features/files/FilesTableDropdown';
 
 export const columns: ColumnDef<File>[] = [
 	{
@@ -74,6 +75,6 @@ export const columns: ColumnDef<File>[] = [
 	},
 	{
 		id: 'actions',
-		cell: 'Actions',
+		cell: ({ row }) => <FilesTableDropdown file={row.original} />,
 	},
 ];

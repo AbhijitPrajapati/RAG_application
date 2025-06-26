@@ -28,7 +28,7 @@ export const fetchRAGResponse = async (
 	return res.body;
 };
 
-export const _deleteCollection = async (id: number) => {
+export const deleteCollection = async (id: number) => {
 	const res = await fetch(`http://localhost:8000/collections/${id}`, {
 		method: 'DELETE',
 	});
@@ -49,7 +49,7 @@ export const uploadFiles = async (files: File[], collectionId: number) => {
 	await responseOkay(res);
 };
 
-export const _bulkDeleteCollections = async (ids: Array<number>) => {
+export const bulkDeleteCollections = async (ids: Array<number>) => {
 	const res = await fetch('http://localhost:8000/collections/bulk-delete', {
 		method: 'POST',
 		headers: {
@@ -60,7 +60,7 @@ export const _bulkDeleteCollections = async (ids: Array<number>) => {
 	await responseOkay(res);
 };
 
-export const _getCollections = async () => {
+export const getCollections = async () => {
 	const res = await fetch('http://localhost:8000/collections', {
 		method: 'GET',
 	});
@@ -68,7 +68,7 @@ export const _getCollections = async () => {
 	return res.json();
 };
 
-export const _createCollection = async (name: string) => {
+export const createCollection = async (name: string) => {
 	const res = await fetch('http://localhost:8000/collections', {
 		method: 'POST',
 		headers: {
@@ -80,7 +80,7 @@ export const _createCollection = async (name: string) => {
 	return res.json();
 };
 
-export const _renameCollection = async (id: number, name: string) => {
+export const renameCollection = async (id: number, name: string) => {
 	const res = await fetch(`http://localhost:8000/collections/${id}`, {
 		method: 'PATCH',
 		headers: {
@@ -118,4 +118,12 @@ export const bulkDeleteFiles = async (file_ids: Array<number>) => {
 		body: JSON.stringify(file_ids),
 	});
 	await responseOkay(res);
+};
+
+export const getDocument = async (file_id: number) => {
+	const res = await fetch(`http://localhost:8000/files/${file_id}`, {
+		method: 'GET',
+	});
+	await responseOkay(res);
+	return res.json();
 };

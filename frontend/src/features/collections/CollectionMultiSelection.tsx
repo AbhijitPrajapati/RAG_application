@@ -18,9 +18,9 @@ export default function CollectionMultiSelection({
 	// collections = ['collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3','collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3'];
 	// replace max-h-[200px] with just h-[200px] to make it the mininum height
 	return (
-		<div>
+		<>
 			<Label className='text-center m-2 p-1'>Collections</Label>
-			<ScrollArea className='w-full p-4 border rounded-2xl [&>[data-radix-scroll-area-viewport]]:max-h-[200px] min-w-[300px]'>
+			<ScrollArea className='w-full p-4 border rounded-2xl [&>[data-radix-scroll-area-viewport]]:max-h-[200px]'>
 				{collections.map(({ id, name }) => (
 					<div key={id}>
 						<Checkbox
@@ -31,6 +31,6 @@ export default function CollectionMultiSelection({
 					</div>
 				))}
 			</ScrollArea>
-		</div>
+		</>
 	);
 }

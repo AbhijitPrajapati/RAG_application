@@ -51,8 +51,11 @@ class CollectionRenameRequest(BaseModel):
 class CollectionBulkDeletionRequest(BaseModel):
     collection_ids: list[int]
 
-class UploadFilesResposne(BaseModel):
+class UploadFilesResponse(BaseModel):
     files_ids: list[int]
 
 class FileBulkDeletionRequest(BaseModel):
     file_ids: list[int]
+
+class DocumentResponse(BaseModel):
+    document: str
