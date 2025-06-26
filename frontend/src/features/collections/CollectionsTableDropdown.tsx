@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {
 	deleteCollection,
 	renameCollection,
-	useCollections,
 } from '@/stores/useCollectionStore';
 
 import {
@@ -18,7 +17,7 @@ import { toast } from 'sonner';
 import type { Collection } from '@/types';
 import { ConfirmationDialog } from '@/components/ConfimationDialog';
 import NameDialog from './NameDialog';
-import UploadDialog from '@/features/upload/UploadDialog';
+import UploadDialog from '@/features/files/UploadDialog';
 interface CollectionsTableDropdownProps {
 	collection: Collection;
 }
@@ -29,7 +28,6 @@ export function CollectionsTableDropdown({
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [renameOpen, setRenameOpen] = useState(false);
 	const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
-	const collections = useCollections();
 
 	const navigate = useNavigate();
 
@@ -86,13 +84,10 @@ export function CollectionsTableDropdown({
 					renameCollection(collection.id, name)
 				}
 				title='Rename Collection'
-				placeholder='Collection Name'
+				placeholder={collection.name}
 				submitText='Rename'
 				openState={renameOpen}
 				setOpenState={setRenameOpen}
-				disableSubmit={(name: string) =>
-					collections.map((c) => c.name).includes(name)
-				}
 			/>
 			<UploadDialog
 				openState={uploadDialogOpen}

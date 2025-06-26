@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ChatInterface from '@/features/chat/ChatInterface';
-import CollectionSelection from '@/features/collections/CollectionSelection';
+import CollectionMultiSelection from '@/features/collections/CollectionMultiSelection';
 import ConfigDrawer from '@/features/config/ConfigDrawer';
 
 import { Button } from '@/components/ui/button';
 import type { Message, Config } from '@/types';
-import UploadDialog from '@/features/upload/UploadDialog';
+import UploadDialog from '@/features/files/UploadDialog';
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([]);
@@ -46,7 +46,7 @@ export default function ChatPage() {
 	return (
 		<div className='flex'>
 			<div className='flex flex-col w-2/10 items-center py-8 px-10 gap-y-6'>
-				<CollectionSelection
+				<CollectionMultiSelection
 					selectedCollectionIds={selectedCollectionIds}
 					toggleSelectedCollection={toggleSelectedCollection}
 				/>

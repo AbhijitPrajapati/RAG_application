@@ -38,12 +38,14 @@ export const _deleteCollection = async (id: number) => {
 export const uploadFiles = async (files: File[], collectionId: number) => {
 	const formData = new FormData();
 	files.forEach((file) => formData.append('files', file));
-	formData.append('collection_id', collectionId.toString());
 
-	const res = await fetch('http://localhost:8000/upload', {
-		method: 'POST',
-		body: formData,
-	});
+	const res = await fetch(
+		`http://localhost:8000/collections/${collectionId}/files`,
+		{
+			method: 'POST',
+			body: formData,
+		}
+	);
 	await responseOkay(res);
 };
 
@@ -89,14 +91,16 @@ export const _renameCollection = async (id: number, name: string) => {
 	await responseOkay(res);
 };
 
-export const getFiles = async (collection_ids: Array<number>) => {
-	const res = await fetch('http://localhost:8000/files', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({ collection_ids: collection_ids }),
-	});
+export const getFiles = async (collection_id: number) => {
+	const res = await fetch(
+		`http://localhost:8000/collections/${collection_id}/files`,
+		{
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}
+	);
 	await responseOkay(res);
 	return res.json();
 };

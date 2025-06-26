@@ -38,9 +38,6 @@ class FileResponse(BaseModel):
 
     class Config:
         from_attributes = True
-    
-class FilesRequest(BaseModel):
-    collection_ids: list[int]
 
 class CollectionCreationRequest(BaseModel):
     name: str
@@ -53,3 +50,6 @@ class CollectionRenameRequest(BaseModel):
 
 class CollectionBulkDeletionRequest(BaseModel):
     collection_ids: list[int]
+
+class UploadFilesResposne(BaseModel):
+    files_ids: list[int]

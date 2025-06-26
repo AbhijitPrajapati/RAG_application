@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { createCollection, useCollections } from '@/stores/useCollectionStore';
+import { createCollection } from '@/stores/useCollectionStore';
 import { Button } from '@/components/ui/button';
 import NameDialog from './NameDialog';
 
 export default function CollectionCreation() {
 	const [creationOpen, setCreationOpen] = useState(false);
-	const collections = useCollections();
 
 	return (
 		<div>
@@ -18,13 +17,9 @@ export default function CollectionCreation() {
 			<NameDialog
 				onSubmit={createCollection}
 				title='Create Collection'
-				placeholder='Collection Name'
 				submitText='Create'
 				openState={creationOpen}
 				setOpenState={setCreationOpen}
-				disableSubmit={(name: string) =>
-					collections.map((c) => c.name).includes(name)
-				}
 			/>
 		</div>
 	);

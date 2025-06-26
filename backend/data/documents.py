@@ -41,13 +41,12 @@ async def read_files(files):
     
     return names, contents
 
-def files(sql_db, collection_ids):
-    collections = sql_db.query(Collection).filter(Collection.id.in_(collection_ids)).all()
-    files = [file for c in collections for file in c.files]
-    return files
+def files(sql_db, collection_id):
+    collection = sql_db.query(Collection).filter(Collection.id == collection_id).first()
+    return collection.files
 
 def add_documents(chroma_db, sql_db, texts, filenames, collection_id, chunk_max_words=400, chunk_overlap_sentences=1):
-    chunks, metadata = [], []
+    chunks, metadata, file_ids = [], [], []
     
     for text, filename in zip(texts, filenames):
         c = chunk_document(text, chunk_max_words, chunk_overlap_sentences)
@@ -55,6 +54,8 @@ def add_documents(chroma_db, sql_db, texts, filenames, collection_id, chunk_max_
         file = File(name=filename, collection_id=collection_id, number_chunks=len(c), length=len(text))
         sql_db.add(file)
         sql_db.flush()
+
+        file_ids.append(file.id)
 
         chunks.extend(c)
         for chunk in c: 
@@ -66,4 +67,6 @@ def add_documents(chroma_db, sql_db, texts, filenames, collection_id, chunk_max_
     chroma_db.add(documents=chunks, ids=ids, metadatas=metadata)
 
     sql_db.commit()
+
+    return file_ids
 

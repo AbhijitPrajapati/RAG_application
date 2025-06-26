@@ -1,14 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { useCollections } from '@/stores/useCollectionStore';
 import { uploadFiles } from '@/services';
 import { Button } from '@/components/ui/button';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import {
@@ -20,6 +12,8 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog';
 import { X } from 'lucide-react';
+import CollectionSelection from '@/features/collections/CollectionSelection';
+import { useFetchCollections } from '@/stores/useCollectionStore';
 
 interface UploadDialogProps {
 	openState: boolean;
@@ -36,13 +30,16 @@ export default function UploadDialog({
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [uploading, setUploading] = useState<boolean>(false);
 	const [collectionId, setCollectionId] = useState<number | null>(
-		initial_id ? initial_id : null
+		initial_id ?? null
 	);
-	const collections = useCollections();
+	const updateCollections = useFetchCollections();
 
-	const resetState = () => {
-		setFiles([]);
-		setCollectionId(null);
+	const openChange = (open: boolean) => {
+		if (!open) {
+			setFiles([]);
+			setCollectionId(null);
+		}
+		setOpenState(open);
 	};
 
 	const upload = async () => {
@@ -62,52 +59,40 @@ export default function UploadDialog({
 				fileInputRef.current.value = '';
 			}
 			setFiles([]);
-			setOpenState(false);
+			updateCollections();
 		}
 	};
 
 	return (
-		<Dialog open={openState} onOpenChange={setOpenState}>
+		<Dialog open={openState} onOpenChange={openChange}>
 			<DialogContent
-				className='min-w-[500px] min-h-[200px] max-w-none p-8'
+				className='min-w-[500px] min-h-[200px] max-w-none p-8 gap-y-4'
 				aria-describedby={undefined}
 				showCloseButton={false}
 			>
-				<DialogHeader>
+				<DialogHeader className='m-1'>
 					<DialogTitle>Upload Files</DialogTitle>
 					<DialogClose asChild>
 						<Button
 							variant='ghost'
 							className='absolute right-4 top-4 p-2 rounded-full'
-							onClick={resetState}
 						>
 							<X className='h-4 w-4' />
 						</Button>
 					</DialogClose>
 				</DialogHeader>
 
-				<Select
-					onValueChange={(e) => setCollectionId(Number(e))}
-					defaultValue={collectionId?.toString()}
-				>
-					<SelectTrigger className='w-[300px]'>
-						<SelectValue placeholder='Select a Collection' />
-					</SelectTrigger>
-					<SelectContent>
-						{collections.map(({ id, name }) => (
-							<div key={id}>
-								<SelectItem value={id.toString()}>
-									{name}
-								</SelectItem>
-							</div>
-						))}
-					</SelectContent>
-				</Select>
+				<p>{collectionId}</p>
+
+				<CollectionSelection
+					setSelectedId={setCollectionId}
+					defaultId={collectionId ?? undefined}
+					className='w-full'
+				/>
 
 				<Input
 					type='file'
 					ref={fileInputRef}
-					className=''
 					multiple
 					onChange={(e) => {
 						setFiles(Array.from(e.target.files ?? []));
@@ -118,7 +103,10 @@ export default function UploadDialog({
 					<Button
 						className='mx-auto min-w-[150px]'
 						disabled={!collectionId || !files?.length || uploading}
-						onClick={upload}
+						onClick={(e) => {
+							e.stopPropagation();
+							upload();
+						}}
 					>
 						Upload
 					</Button>

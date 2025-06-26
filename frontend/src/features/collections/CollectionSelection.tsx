@@ -1,40 +1,41 @@
 import React from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { useCollections } from '@/stores/useCollectionStore';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
 
 interface CollectionSelectionProps {
-	selectedCollectionIds: Set<number>;
-	toggleSelectedCollection: (id: number) => void;
+	setSelectedId: (id: number) => void;
+	defaultId?: number;
+	className?: string;
 }
 
 export default function CollectionSelection({
-	selectedCollectionIds,
-	toggleSelectedCollection,
+	setSelectedId,
+	defaultId,
+	className,
 }: CollectionSelectionProps) {
 	const collections = useCollections();
 
-	// collections = ['collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3','collection_1', 'collection_2', 'collection_3', 'collection_1', 'collection_2', 'collection_3'];
-	// replace max-h-[200px] with just h-[200px] to make it the mininum height
 	return (
-		<div className='max-w-[300px]'>
-			<Label className='text-center m-2 p-1'>Collections</Label>
-			<ScrollArea className='border rounded-2xl [&>[data-radix-scroll-area-viewport]]:max-h-[200px] w-full p-4'>
-				<div>
-					{collections.map(({ id, name }) => (
-						<div key={id}>
-							<Checkbox
-								checked={selectedCollectionIds.has(id)}
-								onCheckedChange={() =>
-									toggleSelectedCollection(id)
-								}
-							/>
-							<label>{name}</label>
-						</div>
-					))}
-				</div>
-			</ScrollArea>
-		</div>
+		<Select
+			defaultValue={defaultId?.toString()}
+			onValueChange={(value: string) => setSelectedId(Number(value))}
+		>
+			<SelectTrigger className={className}>
+				<SelectValue placeholder='Select a Collection' />
+			</SelectTrigger>
+			<SelectContent>
+				{collections.map(({ id, name }) => (
+					<div key={id}>
+						<SelectItem value={id.toString()}>{name}</SelectItem>
+					</div>
+				))}
+			</SelectContent>
+		</Select>
 	);
 }

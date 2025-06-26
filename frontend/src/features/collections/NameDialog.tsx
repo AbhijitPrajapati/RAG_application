@@ -10,15 +10,15 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X } from 'lucide-react';
+import { useCollections } from '@/stores/useCollectionStore';
 
 interface NameDialogProps {
 	onSubmit: (name: string) => void;
 	title: string;
-	placeholder: string;
+	placeholder?: string;
 	submitText: string;
 	openState: boolean;
 	setOpenState: (open: boolean) => void;
-	disableSubmit: (name: string) => boolean;
 }
 
 export default function NameDialog({
@@ -28,9 +28,10 @@ export default function NameDialog({
 	submitText,
 	openState,
 	setOpenState,
-	disableSubmit,
 }: NameDialogProps) {
 	const [name, setName] = useState<string>('');
+	const collection = useCollections();
+	const disallowedNames = collection.map((c) => c.name);
 
 	return (
 		<div>
@@ -70,7 +71,7 @@ export default function NameDialog({
 									onSubmit(name);
 									setName('');
 								}}
-								disabled={disableSubmit(name)}
+								disabled={disallowedNames.includes(name)}
 							>
 								{submitText}
 							</Button>

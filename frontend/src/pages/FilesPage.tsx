@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import CollectionSelection from '@/features/collections/CollectionSelection';
 import useFiles from '@/hooks/useFiles';
 import type { File } from '@/types';
 import { type Table } from '@tanstack/react-table';
@@ -8,28 +7,17 @@ import { columns } from '@/features/files/FileTableColumns';
 import { DataTable } from '@/components/DataTable';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import UploadDialog from '@/features/upload/UploadDialog';
+import UploadDialog from '@/features/files/UploadDialog';
+import CollectionSelection from '@/features/collections/CollectionSelection';
 
 export default function FilesPage() {
 	const [searchParams] = useSearchParams();
 	const initialId = Number(searchParams.get('initial_id'));
 	const [openUpload, setOpenUpload] = useState(false);
 
-	const [collectionIds, setCollectionIds] = useState<Set<number>>(
-		new Set([initialId])
-	);
+	const [collectionId, setCollectionId] = useState<number>(initialId);
 
-	const toggleCollection = (id: number) => {
-		const newSet = new Set(collectionIds);
-		if (newSet.has(id)) {
-			newSet.delete(id);
-		} else {
-			newSet.add(id);
-		}
-		setCollectionIds(newSet);
-	};
-
-	const data = useFiles(collectionIds);
+	const data = useFiles(collectionId);
 
 	return (
 		<DataTable
@@ -37,10 +25,13 @@ export default function FilesPage() {
 			columns={columns}
 			renderControls={(table: Table<File>) => (
 				<>
+					<p>{collectionId}</p>
 					<CollectionSelection
-						selectedCollectionIds={collectionIds}
-						toggleSelectedCollection={toggleCollection}
+						setSelectedId={setCollectionId}
+						defaultId={initialId}
+						className='w-1/4'
 					/>
+
 					<Input
 						placeholder='Search'
 						value={
@@ -53,14 +44,13 @@ export default function FilesPage() {
 								.getColumn('name')
 								?.setFilterValue(event.target.value)
 						}
-						className='max-w-sm'
+						className='w-1/4'
 					/>
-					<Button className='' onClick={() => setOpenUpload(true)}>
-						Upload
-					</Button>
+					<Button onClick={() => setOpenUpload(true)}>Upload</Button>
 					<UploadDialog
 						openState={openUpload}
 						setOpenState={setOpenUpload}
+						initial_id={collectionId}
 					/>
 				</>
 			)}
