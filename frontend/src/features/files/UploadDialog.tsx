@@ -82,8 +82,6 @@ export default function UploadDialog({
 					</DialogClose>
 				</DialogHeader>
 
-				<p>{collectionId}</p>
-
 				<CollectionSelection
 					setSelectedId={setCollectionId}
 					defaultId={collectionId ?? undefined}

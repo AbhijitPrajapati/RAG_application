@@ -34,9 +34,13 @@ export default function CollectionsPage() {
 					<CollectionCreation />
 
 					<CollectionBulkDeletion
-						deletion_ids={Object.keys(
-							table.getState().rowSelection
-						).map(Number)}
+						deletion_ids={
+							new Set(
+								Object.keys(table.getState().rowSelection).map(
+									Number
+								)
+							)
+						}
 					/>
 				</>
 			)}

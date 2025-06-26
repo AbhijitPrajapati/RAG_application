@@ -1,7 +1,6 @@
 
 from .chunking import chunk_document
 from .sqlalchemy_setup import Collection, File
-from datetime import datetime
 from errors import EmptyFileError, InvalidFileFormatError
 
 # seperate read_files when more file types come
@@ -70,3 +69,12 @@ def add_documents(chroma_db, sql_db, texts, filenames, collection_id, chunk_max_
 
     return file_ids
 
+def delete_documents(chroma_db, sql_db, file_ids):
+    chunks = chroma_db.get(where={'file_id': 
+                                    {'$in': file_ids}
+                                    })
+    chroma_db.delete(ids=chunks['ids'])
+
+    files = sql_db.query(File).filter(File.id.in_(file_ids)).all()
+    for f in files: sql_db.delete(f)
+    sql_db.commit()

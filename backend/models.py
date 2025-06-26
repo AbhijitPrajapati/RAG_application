@@ -53,3 +53,6 @@ class CollectionBulkDeletionRequest(BaseModel):
 
 class UploadFilesResposne(BaseModel):
     files_ids: list[int]
+
+class FileBulkDeletionRequest(BaseModel):
+    file_ids: list[int]

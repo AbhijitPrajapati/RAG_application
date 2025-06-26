@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-	deleteCollection,
-	renameCollection,
+	useDeleteCollection,
+	useRenameCollection,
 } from '@/stores/useCollectionStore';
 
 import {
@@ -28,6 +28,8 @@ export function CollectionsTableDropdown({
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [renameOpen, setRenameOpen] = useState(false);
 	const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+	const deleteCollection = useDeleteCollection();
+	const renameCollection = useRenameCollection();
 
 	const navigate = useNavigate();
 

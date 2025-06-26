@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { createCollection } from '@/stores/useCollectionStore';
+import { useCreateCollection } from '@/stores/useCollectionStore';
 import { Button } from '@/components/ui/button';
 import NameDialog from './NameDialog';
 
 export default function CollectionCreation() {
 	const [creationOpen, setCreationOpen] = useState(false);
+	const createCollection = useCreateCollection();
 
 	return (
 		<div>

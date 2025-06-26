@@ -96,11 +96,26 @@ export const getFiles = async (collection_id: number) => {
 		`http://localhost:8000/collections/${collection_id}/files`,
 		{
 			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
 		}
 	);
 	await responseOkay(res);
 	return res.json();
+};
+
+export const deleteFile = async (file_id: number) => {
+	const res = await fetch(`http://localhost:8000/files/${file_id}`, {
+		method: 'GET',
+	});
+	await responseOkay(res);
+};
+
+export const bulkDeleteFiles = async (file_ids: Array<number>) => {
+	const res = await fetch('http://localhost:8000/files/bulk-delete', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(file_ids),
+	});
+	await responseOkay(res);
 };

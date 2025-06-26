@@ -39,10 +39,6 @@ export const columns: ColumnDef<File>[] = [
 		header: 'Name',
 	},
 	{
-		accessorKey: 'collection_id',
-		header: 'Collection Id',
-	},
-	{
 		accessorKey: 'uploaded_at',
 		header: ({ column }) => {
 			return (

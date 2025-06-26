@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import UploadDialog from '@/features/files/UploadDialog';
 import CollectionSelection from '@/features/collections/CollectionSelection';
+import FileBulkDeletion from '@/features/files/FileBulkDeletion';
 
 export default function FilesPage() {
 	const [searchParams] = useSearchParams();
@@ -25,7 +26,6 @@ export default function FilesPage() {
 			columns={columns}
 			renderControls={(table: Table<File>) => (
 				<>
-					<p>{collectionId}</p>
 					<CollectionSelection
 						setSelectedId={setCollectionId}
 						defaultId={initialId}
@@ -51,6 +51,16 @@ export default function FilesPage() {
 						openState={openUpload}
 						setOpenState={setOpenUpload}
 						initial_id={collectionId}
+						key={collectionId}
+					/>
+					<FileBulkDeletion
+						deletion_ids={
+							new Set(
+								Object.keys(table.getState().rowSelection).map(
+									Number
+								)
+							)
+						}
 					/>
 				</>
 			)}
