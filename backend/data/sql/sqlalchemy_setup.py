@@ -5,7 +5,7 @@ from .event_handlers import *
 from datetime import datetime, timezone
 time_now = lambda: datetime.now(timezone.utc)
 
-engine = create_engine(f'sqlite:///data/sql_store.db', echo=True)
+engine = create_engine(f'sqlite:///data/sql/sql_store.db', echo=True)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
@@ -43,4 +43,4 @@ def get_db():
     finally:
         db.close()
 
-# Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)

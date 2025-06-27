@@ -1,6 +1,6 @@
 
-from .chunking import chunk_document
-from .sqlalchemy_setup import Collection, File
+from backend.chunking.semantic_chunking import chunk_document
+from data.sql.sqlalchemy_setup import Collection, File
 from errors import EmptyFileError, InvalidFileFormatError
 
 # seperate read_files when more file types come

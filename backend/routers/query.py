@@ -1,7 +1,7 @@
 from fastapi.responses import StreamingResponse
 from fastapi import APIRouter, Request
 from models import Query
-from rag.query_engine import query
+from backend.services.query_engine import query
 
 query_router = APIRouter(prefix='/query')
 

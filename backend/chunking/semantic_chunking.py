@@ -1,4 +1,5 @@
 from nltk.tokenize import sent_tokenize
+from embedding_model.load import load_embedding_model
 
 def chunk_document(text, chunk_max_words, chunk_overlap_sentences):
     '''
