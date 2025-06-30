@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, status, Depends, Response
-from data.collections import get, delete, create, rename
-from data.sqlalchemy_setup import get_db
+from services.collections import get, delete, create, rename
+from data.sql.sqlalchemy_setup import get_db
 from models import CollectionResponse, CollectionCreationRequest, CollectionCreationResponse, CollectionRenameRequest, CollectionBulkDeletionRequest
 
 collections_router = APIRouter(prefix='/collections')

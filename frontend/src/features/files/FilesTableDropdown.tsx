@@ -24,7 +24,7 @@ export default function FilesTableDropdown({ file }: FilesTableDropdownProps) {
 
 	const delete_fn = async () => {
 		try {
-			await deleteFile(file.collection_id, file.id);
+			deleteFile(file.collection_id, file.id);
 			toast.success(`Deleted ${file.name}`);
 		} catch (err) {
 			if (err instanceof Error) {

@@ -44,7 +44,7 @@ export default function UploadDialog({
 	const upload = async () => {
 		setUploading(true);
 		try {
-			await uploadFiles(collectionId!, files);
+			uploadFiles(collectionId!, files);
 			const text =
 				files.length === 1 ? files[0].name : `${files.length} files`;
 			toast.success(`${text} uploaded`);

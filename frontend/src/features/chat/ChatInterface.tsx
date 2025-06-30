@@ -8,7 +8,7 @@ import type { Message, Config } from '@/types';
 import { fetchRAGResponse } from '@/services';
 
 interface ChatInterfaceProps {
-	messages: Message[];
+	messages: Array<Message>;
 	setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 	selectedCollectionIds: Set<number>;
 	config: Config;

@@ -2,35 +2,13 @@ import React from 'react';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type { File } from '@/types';
+import SortableDataTableHeader from '@/components/SortableDataTableHeader';
 
-import { ArrowUpDown } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import FilesTableDropdown from '@/features/files/FilesTableDropdown';
+import { selectColumn } from '@/components/DataTableSelectColumn';
 
 export const columns: ColumnDef<File>[] = [
-	{
-		id: 'select',
-		header: ({ table }) => (
-			<Checkbox
-				checked={
-					table.getIsAllRowsSelected() ||
-					(table.getIsSomeRowsSelected() && 'indeterminate')
-				}
-				onCheckedChange={(value) =>
-					table.toggleAllRowsSelected(!!value)
-				}
-			/>
-		),
-		cell: ({ row }) => (
-			<Checkbox
-				checked={row.getIsSelected()}
-				onCheckedChange={(value) => row.toggleSelected(!!value)}
-			/>
-		),
-		enableSorting: false,
-	},
+	selectColumn as ColumnDef<File>,
 	{
 		accessorKey: 'id',
 		header: 'Id',
@@ -41,37 +19,23 @@ export const columns: ColumnDef<File>[] = [
 	},
 	{
 		accessorKey: 'uploaded_at',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant='ghost'
-					onClick={() =>
-						column.toggleSorting(column.getIsSorted() === 'asc')
-					}
-				>
-					Uploaded At
-					<ArrowUpDown className='h-4 w-4' />
-				</Button>
-			);
-		},
+		header: ({ column }) => (
+			<SortableDataTableHeader column={column} label='Uploaded At' />
+		),
 		cell: ({ row }) =>
 			new Date(row.getValue('uploaded_at')).toLocaleDateString(),
 	},
 	{
 		accessorKey: 'number_chunks',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant='ghost'
-					onClick={() =>
-						column.toggleSorting(column.getIsSorted() === 'asc')
-					}
-				>
-					Chunks
-					<ArrowUpDown className='h-4 w-4' />
-				</Button>
-			);
-		},
+		header: ({ column }) => (
+			<SortableDataTableHeader column={column} label='Uploaded At' />
+		),
+	},
+	{
+		accessorKey: 'length',
+		header: ({ column }) => (
+			<SortableDataTableHeader column={column} label='Length' />
+		),
 	},
 	{
 		id: 'actions',

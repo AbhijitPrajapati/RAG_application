@@ -25,3 +25,5 @@ export interface Config {
 	max_tokens: number;
 	temperature: number;
 }
+
+export type DataTableType = Collection | File;

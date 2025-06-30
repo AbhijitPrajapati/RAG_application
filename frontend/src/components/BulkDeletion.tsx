@@ -3,7 +3,6 @@ import { toast } from 'sonner';
 import { ConfirmationDialog } from '@/components/ConfimationDialog';
 import { Button } from '@/components/ui/button';
 import type { File, Collection } from '@/types';
-
 interface FileBulkDeletionProps<T extends Collection | File> {
 	deletion_items: Array<T>;
 	item_type: 'collections' | 'files';
@@ -19,7 +18,8 @@ export default function FileBulkDeletion<T extends Collection | File>({
 
 	const deleteBulk = async () => {
 		try {
-			await deletion_func(deletion_items.map((c) => c.id));
+			deletion_func(deletion_items.map((c) => c.id));
+
 			const text =
 				deletion_items.length === 1
 					? deletion_items.at(0)?.name

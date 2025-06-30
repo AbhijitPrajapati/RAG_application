@@ -8,7 +8,7 @@ export default function CollectionCreation() {
 	const createCollection = useCreateCollection();
 
 	return (
-		<div>
+		<>
 			<Button
 				onClick={() => setCreationOpen(true)}
 				className='align-middle'
@@ -22,6 +22,6 @@ export default function CollectionCreation() {
 				openState={creationOpen}
 				setOpenState={setCreationOpen}
 			/>
-		</div>
+		</>
 	);
 }

@@ -1,5 +1,5 @@
 
-from backend.chunking.semantic_chunking import chunk_document
+from chunking.semantic_chunking import chunk_document
 from data.sql.sqlalchemy_setup import Collection, File
 from errors import EmptyFileError, InvalidFileFormatError
 
@@ -44,11 +44,11 @@ def files(sql_db, collection_id):
     collection = sql_db.query(Collection).filter(Collection.id == collection_id).first()
     return collection.files
 
-def add_documents(chroma_db, sql_db, texts, filenames, collection_id, chunk_max_words=400, chunk_overlap_sentences=1):
+def add_documents(chroma_db, sql_db, embedding_model, texts, filenames, collection_id, chunk_similarity_threshold=0.55, chunk_overlap_sentences=1):
     chunks, metadata, file_ids = [], [], []
     
     for text, filename in zip(texts, filenames):
-        c = chunk_document(text, chunk_max_words, chunk_overlap_sentences)
+        c = chunk_document(text, embedding_model, chunk_similarity_threshold, chunk_overlap_sentences)
 
         file = File(name=filename, collection_id=collection_id, number_chunks=len(c), length=len(text))
         sql_db.add(file)
@@ -79,7 +79,7 @@ def delete_documents(chroma_db, sql_db, file_ids):
     for f in files: sql_db.delete(f)
     sql_db.commit()
 
-def get_chunks(chroma_db, file_id):
+def get_document(chroma_db, file_id):
     chunks = chroma_db.get(where={'file_id': file_id}, include=['documents'])
     return ''.join(chunks['documents'])
     

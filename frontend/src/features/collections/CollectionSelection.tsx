@@ -25,6 +25,7 @@ export default function CollectionSelection({
 		<Select
 			defaultValue={defaultId?.toString()}
 			onValueChange={(value: string) => setSelectedId(Number(value))}
+			disabled={collections.length === 0}
 		>
 			<SelectTrigger className={className}>
 				<SelectValue placeholder='Select a Collection' />

@@ -1,3 +1,4 @@
+# will most likely go soon
 class AppError(Exception):
     def __init__(self, detail: str, status_code: int = 400):
         self.detail = detail

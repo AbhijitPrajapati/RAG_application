@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import type { File } from '@/types';
-import { getDocument } from '@/services';
+import { useGetFile } from '@/stores/useFilesStore';
 
 interface ViewFileDialogProps {
 	openState: boolean;
@@ -23,11 +23,12 @@ export default function ViewFileDialog({
 	file,
 }: ViewFileDialogProps) {
 	const [content, setContent] = useState('');
+	const getFile = useGetFile();
 	useEffect(() => {
 		if (!openState) return;
 		const getContent = async (): Promise<void> => {
-			const doc = await getDocument(file.id);
-			setContent(doc['document']);
+			const doc = await getFile(file.id);
+			setContent(doc);
 		};
 		getContent();
 	}, [openState, file.id]);

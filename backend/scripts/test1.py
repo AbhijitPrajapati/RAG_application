@@ -1,3 +1,9 @@
-d = {'d': [3, 4, 5], 'a': [5, 4], 'c': [6, 45, 1 ]}
+l = [4, 5,2, ]
+l1 = [1, 1,5, ]
 
-print(d['a'] + d['c'])
+for i, (one, two) in enumerate(zip(l, l1)):
+    print(i, one, two)
+
+
+h = [4]
+if h: print(';f')

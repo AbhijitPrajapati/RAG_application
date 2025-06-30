@@ -23,15 +23,15 @@ import type {
 	SortingState,
 	Table as TanStackTable,
 } from '@tanstack/react-table';
-import type { Collection, File } from '@/types';
+import type { DataTableType } from '@/types';
 
-interface DataTableProps<T extends Collection | File> {
+interface DataTableProps<T extends DataTableType> {
 	data: Array<T>;
 	columns: Array<ColumnDef<T>>;
 	renderControls: (table: TanStackTable<T>) => React.ReactNode;
 }
 
-export function DataTable<T extends Collection | File>({
+export function DataTable<T extends DataTableType>({
 	data,
 	columns,
 	renderControls,

@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 import type { File as CustomFile } from '@/types';
-import { getFiles, deleteFile, uploadFiles, bulkDeleteFiles } from '@/services';
+import {
+	getFiles,
+	deleteFile,
+	uploadFiles,
+	bulkDeleteFiles,
+	getDocument,
+} from '@/services';
 
 interface FilesState {
 	files: CustomFile[];
@@ -8,6 +14,7 @@ interface FilesState {
 	deleteFile: (collection_id: number, file_id: number) => void;
 	deleteFiles: (collection_id: number, file_ids: Array<number>) => void;
 	uploadFiles: (collection_id: number, files: Array<File>) => void;
+	getFile: (file_id: number) => Promise<string>;
 }
 
 const useFilesStore = create<FilesState>((set, get) => ({
@@ -28,6 +35,10 @@ const useFilesStore = create<FilesState>((set, get) => ({
 		await uploadFiles(files, collection_id);
 		get().fetchFiles(collection_id);
 	},
+	getFile: async (file_id: number) => {
+		const content = await getDocument(file_id);
+		return content['document'];
+	},
 }));
 
 export const useFiles = () => useFilesStore((state) => state.files);
@@ -35,3 +46,4 @@ export const useFetchFiles = () => useFilesStore((state) => state.fetchFiles);
 export const useDeleteFile = () => useFilesStore((state) => state.deleteFile);
 export const useDeleteFiles = () => useFilesStore((state) => state.deleteFiles);
 export const useUploadFiles = () => useFilesStore((state) => state.uploadFiles);
+export const useGetFile = () => useFilesStore((state) => state.getFile);
