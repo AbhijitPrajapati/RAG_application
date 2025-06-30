@@ -70,9 +70,10 @@ export default function FilesPage() {
 								.includes(f.id)
 						)}
 						item_type='files'
-						deletion_func={(ids: Array<number>) =>
-							deleteFiles(collectionId, ids)
-						}
+						deletion_func={(ids: Array<number>) => {
+							deleteFiles(ids);
+							fetchFiles(collectionId);
+						}}
 					/>
 				</>
 			)}

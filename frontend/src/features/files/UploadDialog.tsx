@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useUploadFiles } from '@/stores/useFilesStore';
+import { useFetchFiles } from '@/stores/useFilesStore';
+import { useFetchCollections } from '@/stores/useCollectionStore';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
@@ -33,6 +35,9 @@ export default function UploadDialog({
 	);
 	const uploadFiles = useUploadFiles();
 
+	const fetchFiles = useFetchFiles();
+	const fetchCollections = useFetchCollections();
+
 	const openChange = (open: boolean) => {
 		if (!open) {
 			setFiles([]);
@@ -45,6 +50,8 @@ export default function UploadDialog({
 		setUploading(true);
 		try {
 			uploadFiles(collectionId!, files);
+			fetchFiles(collectionId!);
+			fetchCollections();
 			const text =
 				files.length === 1 ? files[0].name : `${files.length} files`;
 			toast.success(`${text} uploaded`);
