@@ -1,7 +1,6 @@
 
 from chunking.semantic_chunking import chunk_document
 from data.sql.sqlalchemy_setup import Collection, File
-from errors import EmptyFileError, InvalidFileFormatError
 
 # seperate read_files when more file types come
 
@@ -11,32 +10,14 @@ async def read_files(files):
     names = []
     contents = []
 
-    empty = []
-    invalid_ext = []
-
     for f in files:
         filename = f.filename
 
-        ext = filename[filename.rfind('.'):].lower()
-        if ext not in ALLOWED_EXTENSIONS:
-            invalid_ext.append(filename)
-            continue
-
         content_bytes = await f.read()
         text = content_bytes.decode().strip()
-
-        if not text:
-            empty.append(filename)
-            continue
         
         names.append(filename)
         contents.append(text)
-
-    if invalid_ext:
-        raise InvalidFileFormatError(invalid_ext)
-
-    if empty:
-        raise EmptyFileError(empty)
     
     return names, contents
 

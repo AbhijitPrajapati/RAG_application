@@ -7,7 +7,6 @@ from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunct
 
 from llm.load import load_model
 from embedding_model.load import load_embedding_model
-from errors import AppError
 
 from routers.collections import collections_router
 from routers.query import query_router
@@ -34,13 +33,6 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
-
-@app.exception_handler(AppError)
-async def error_handler(exc: AppError):
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={'detail': exc.detail}
-    )
 
 app.include_router(collections_router)
 app.include_router(query_router)
