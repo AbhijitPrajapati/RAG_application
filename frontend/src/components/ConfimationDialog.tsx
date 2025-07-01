@@ -22,24 +22,28 @@ export function ConfirmationDialog({
 }: ConfirmationDialogProps) {
 	return (
 		<Dialog open={openState} onOpenChange={setOpenState}>
-			<DialogContent showCloseButton={false} aria-describedby={undefined}>
+			<DialogContent
+				showCloseButton={false}
+				aria-describedby={undefined}
+				className='p-8'
+			>
 				<DialogHeader>
 					<DialogTitle>Are you sure?</DialogTitle>
 				</DialogHeader>
 				<p>This action cannot be undone.</p>
-				<DialogFooter>
+				<DialogFooter className='space-x-2'>
 					<DialogClose asChild>
 						<Button variant='outline'>Cancel</Button>
 					</DialogClose>
-					<Button
-						variant='destructive'
-						onClick={() => {
-							onConfirm();
-							setOpenState(false);
-						}}
-					>
-						Confirm
-					</Button>
+					<DialogClose asChild>
+						<Button
+							variant='destructive'
+							className='bg-destructive/75'
+							onClick={onConfirm}
+						>
+							Confirm
+						</Button>
+					</DialogClose>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

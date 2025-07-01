@@ -21,11 +21,11 @@ export default function ConfigSlider({
 	setValue,
 }: ConfigSliderProps) {
 	return (
-		<div className='p-3'>
+		<div className='p-3.5'>
 			<Label>{label}</Label>
 			<div className='flex items-center gap-4'>
 				<div className='flex items-center w-full gap-2'>
-					<div className='w-[40px] text-sm text-muted-foreground text-right m-2'>
+					<div className='w-10 text-sm text-muted-foreground text-right m-2'>
 						{min}
 					</div>
 					<Slider
@@ -36,7 +36,7 @@ export default function ConfigSlider({
 						onValueChange={(v: Array<number>) => setValue(v[0])}
 						className='flex-1'
 					/>
-					<div className='w-[40px] text-sm text-muted-foreground m-2'>
+					<div className='w-10 text-sm text-muted-foreground m-2'>
 						{max}
 					</div>
 				</div>
@@ -47,7 +47,7 @@ export default function ConfigSlider({
 					min={min}
 					max={max}
 					onChange={(e) => setValue(e.target.valueAsNumber)}
-					className='w-1/10 align-right'
+					className='w-24 align-right'
 				/>
 			</div>
 		</div>

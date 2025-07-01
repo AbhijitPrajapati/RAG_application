@@ -8,7 +8,7 @@ query_router = APIRouter(prefix='/query')
 @query_router.post('/', response_class=StreamingResponse)
 async def query_rag(req: Query, request: Request):
     return StreamingResponse(query(req.query, 
-                                   request.app.state.large_language_model, 
+                                   request.app.state.generation_model, 
                                    request.app.state.chroma, 
                                    req.selected_collection_ids, 
                                    req.max_tokens, 

@@ -14,13 +14,13 @@ from routers.files import files_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.chroma = PersistentClient('data/chroma_db').get_collection('documents', embedding_function=SentenceTransformerEmbeddingFunction(model_name='BAAI/bge-small-en-v1.5', device='cuda')) # type: ignore
-    # app.state.large_language_model = load_model()
+    # app.state.generation_model = load_model()
     app.state.embedding_model = load_embedding_model()
 
     yield
 
     app.state.chroma = None
-    app.state.large_language_model = None
+    app.state.generation_model = None
     app.state.embedding_model = None
 
 app = FastAPI(lifespan=lifespan)

@@ -83,8 +83,8 @@ export default function ChatInterface({
 	};
 
 	return (
-		<Card className='fixed right-0 h-screen w-8/10 flex-col'>
-			<CardContent className='h-9/10'>
+		<Card className='basis-4/5 h-screen flex-col'>
+			<CardContent className='h-full'>
 				<ScrollArea className='h-full'>
 					<div className='space-y-4'>
 						{messages.map((msg, idx) => (
@@ -102,7 +102,7 @@ export default function ChatInterface({
 					</div>
 				</ScrollArea>
 			</CardContent>
-			<div className='mx-auto p-6 flex gap-2 w-6/10'>
+			<div className='mx-auto p-6 flex gap-2 w-4xl'>
 				<Textarea
 					value={query}
 					onChange={(e) => setInput(e.target.value)}

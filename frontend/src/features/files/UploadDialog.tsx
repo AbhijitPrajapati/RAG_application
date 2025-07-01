@@ -7,14 +7,13 @@ import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import {
 	Dialog,
-	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog';
-import { X } from 'lucide-react';
 import CollectionSelection from '@/features/collections/CollectionSelection';
+import DialogExit from '@/components/DialogExit';
 
 interface UploadDialogProps {
 	openState: boolean;
@@ -70,49 +69,54 @@ export default function UploadDialog({
 	return (
 		<Dialog open={openState} onOpenChange={openChange}>
 			<DialogContent
-				className='min-w-[500px] min-h-[200px] max-w-none p-8 gap-y-4'
+				className='p-6'
 				aria-describedby={undefined}
 				showCloseButton={false}
 			>
-				<DialogHeader className='m-1'>
+				<DialogHeader className='m-1.5'>
 					<DialogTitle>Upload Files</DialogTitle>
-					<DialogClose asChild>
+					{/* <DialogClose asChild>
 						<Button
 							variant='ghost'
 							className='absolute right-4 top-4 p-2 rounded-full'
 						>
 							<X className='h-4 w-4' />
 						</Button>
-					</DialogClose>
+					</DialogClose> */}
+					<DialogExit />
 				</DialogHeader>
 
-				<CollectionSelection
-					setSelectedId={setCollectionId}
-					defaultId={collectionId}
-					className='w-full'
-				/>
+				<div className='space-y-5 m-5'>
+					<CollectionSelection
+						setSelectedId={setCollectionId}
+						defaultId={collectionId}
+						className='w-full'
+					/>
 
-				<Input
-					type='file'
-					ref={fileInputRef}
-					multiple
-					onChange={(e) => {
-						setFiles(Array.from(e.target.files ?? []));
-					}}
-				/>
-
-				<DialogFooter>
-					<Button
-						className='mx-auto min-w-[150px]'
-						disabled={!collectionId || !files?.length || uploading}
-						onClick={(e) => {
-							e.stopPropagation();
-							upload();
+					<Input
+						type='file'
+						ref={fileInputRef}
+						multiple
+						onChange={(e) => {
+							setFiles(Array.from(e.target.files ?? []));
 						}}
-					>
-						Upload
-					</Button>
-				</DialogFooter>
+					/>
+
+					<DialogFooter>
+						<Button
+							className='mx-auto min-w-40'
+							disabled={
+								!collectionId || !files?.length || uploading
+							}
+							onClick={(e) => {
+								e.stopPropagation();
+								upload();
+							}}
+						>
+							Upload
+						</Button>
+					</DialogFooter>
+				</div>
 			</DialogContent>
 		</Dialog>
 	);

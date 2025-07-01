@@ -39,7 +39,7 @@ export default function FilesPage() {
 					<CollectionSelection
 						setSelectedId={setCollectionId}
 						defaultId={initialId}
-						className='w-1/4'
+						className='w-sm'
 					/>
 
 					<Input
@@ -54,7 +54,7 @@ export default function FilesPage() {
 								.getColumn('name')
 								?.setFilterValue(event.target.value)
 						}
-						className='w-1/4'
+						className='w-sm'
 					/>
 					<Button onClick={() => setOpenUpload(true)}>Upload</Button>
 					<UploadDialog

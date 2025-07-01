@@ -45,7 +45,7 @@ export default function ChatPage() {
 
 	return (
 		<div className='flex'>
-			<div className='flex flex-col w-2/10 items-center py-8 px-10 gap-y-5'>
+			<div className='flex flex-col basis-1/5 items-center py-8 px-10 gap-y-6'>
 				<CollectionMultiSelection
 					selectedCollectionIds={selectedCollectionIds}
 					toggleSelectedCollection={toggleSelectedCollection}
@@ -68,7 +68,10 @@ export default function ChatPage() {
 					updateConfig={updateConfig}
 					resetConfig={resetConfig}
 				/>
-				<Button onClick={() => setMessages([])} className='w-full'>
+				<Button
+					onClick={() => setMessages([])}
+					className='w-full hover:bg-destructive/50 duration-300'
+				>
 					Clear Chat
 				</Button>
 			</div>

@@ -22,21 +22,30 @@ export const columns: ColumnDef<Collection>[] = [
 		header: ({ column }) => (
 			<SortableDataTableHeader column={column} label='Created At' />
 		),
-		cell: ({ row }) =>
-			new Date(row.getValue('created_at')).toLocaleDateString(),
+		cell: ({ row }) => (
+			<div className='ml-3'>
+				{new Date(row.getValue('created_at')).toLocaleDateString()}
+			</div>
+		),
 	},
 	{
 		accessorKey: 'last_modified',
 		header: ({ column }) => (
 			<SortableDataTableHeader column={column} label='Last Modified' />
 		),
-		cell: ({ row }) =>
-			new Date(row.getValue('last_modified')).toLocaleDateString(),
+		cell: ({ row }) => (
+			<div className='ml-3'>
+				{new Date(row.getValue('last_modified')).toLocaleDateString()}
+			</div>
+		),
 	},
 	{
 		accessorKey: 'number_files',
 		header: ({ column }) => (
 			<SortableDataTableHeader column={column} label='Files' />
+		),
+		cell: ({ row }) => (
+			<div className='ml-3'>{row.getValue('number_files')}</div>
 		),
 	},
 	{

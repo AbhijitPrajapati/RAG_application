@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X } from 'lucide-react';
 import { useCollections } from '@/stores/useCollectionStore';
+import DialogExit from '@/components/DialogExit';
 
 interface NameDialogProps {
 	onSubmit: (name: string) => void;
@@ -33,24 +33,23 @@ export default function NameDialog({
 	const collection = useCollections();
 	const disallowedNames = collection.map((c) => c.name);
 
+	const openChange = (open: boolean) => {
+		if (!open) {
+			setName('');
+		}
+		setOpenState(open);
+	};
+
 	return (
-		<Dialog open={openState} onOpenChange={setOpenState}>
+		<Dialog open={openState} onOpenChange={openChange}>
 			<DialogContent
-				className='min-w-[500px] min-h-[200px] max-w-none p-8'
+				className='w-lg h-56 max-w-none p-8'
 				showCloseButton={false}
 				aria-describedby={undefined}
 			>
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
-					<DialogClose asChild>
-						<Button
-							variant='ghost'
-							className='absolute right-4 top-4 p-2 rounded-full'
-							onClick={() => setName('')}
-						>
-							<X className='h-4 w-4' />
-						</Button>
-					</DialogClose>
+					<DialogExit />
 				</DialogHeader>
 
 				<Input
@@ -59,13 +58,12 @@ export default function NameDialog({
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 						setName(e.target.value);
 					}}
-					className='my-3'
 				/>
 
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button
-							className='mx-auto min-w-[150px]'
+							className='mx-auto w-36'
 							onClick={() => {
 								onSubmit(name);
 								setName('');
