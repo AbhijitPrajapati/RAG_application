@@ -12,7 +12,8 @@ def delete(chroma_db, sql_db, collection_ids):
         chroma_db.delete(ids=chunk_ids)
     
     collections = sql_db.query(Collection).filter(Collection.id.in_(collection_ids)).all()
-    for c in collections: sql_db.delete(c)
+    for c in collections: 
+        sql_db.delete(c)
     sql_db.commit()
 
 def create(name, sql_db):

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components//ui/scroll-area';
-import { Input } from '@/components//ui/input';
 import { toast } from 'sonner';
 import type { Message, Config } from '@/types';
 import { fetchRAGResponse } from '@/services';
+import { Send } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ChatInterfaceProps {
 	messages: Array<Message>;
@@ -101,8 +102,8 @@ export default function ChatInterface({
 					</div>
 				</ScrollArea>
 			</CardContent>
-			<div className='max-w-[40vw] mx-auto flex gap-2'>
-				<Input
+			<div className='mx-auto p-6 flex gap-2 w-6/10'>
+				<Textarea
 					value={query}
 					onChange={(e) => setInput(e.target.value)}
 					onKeyDown={(e) => {
@@ -112,8 +113,11 @@ export default function ChatInterface({
 						}
 					}}
 					placeholder='Type your message...'
+					className='resize-none overflow-y-auto max-h-50 rounded-xl p-3 !text-[15px]'
 				/>
-				<Button onClick={sendMessage}>Send</Button>
+				<Button onClick={sendMessage} className='rounded-full'>
+					<Send />
+				</Button>
 			</div>
 		</Card>
 	);

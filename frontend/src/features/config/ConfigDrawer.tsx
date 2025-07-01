@@ -49,7 +49,9 @@ export default function ConfigDrawer({
 
 				<DrawerContent aria-describedby={undefined}>
 					<DrawerHeader>
-						<DrawerTitle>Configurations</DrawerTitle>
+						<DrawerTitle className='text-lg'>
+							Configurations
+						</DrawerTitle>
 					</DrawerHeader>
 					<DrawerFooter>
 						<div className='w-7/10 mx-auto'>

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, status, Depends, Response
+from fastapi import APIRouter, Request, status, Depends
 from services.collections import get, delete, create, rename
 from data.sql.sqlalchemy_setup import get_db
 from models import CollectionResponse, CollectionCreationRequest, CollectionCreationResponse, CollectionRenameRequest, CollectionBulkDeletionRequest

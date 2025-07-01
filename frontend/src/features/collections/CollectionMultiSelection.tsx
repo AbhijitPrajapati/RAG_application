@@ -19,7 +19,7 @@ export default function CollectionMultiSelection({
 	// replace max-h-[200px] with just h-[200px] to make it the mininum height
 	return (
 		<>
-			<Label className='text-center m-2 p-1'>Collections</Label>
+			<Label className='text-center text-md'>Collections</Label>
 			<ScrollArea className='w-full p-4 border rounded-2xl [&>[data-radix-scroll-area-viewport]]:max-h-[200px]'>
 				{collections.map(({ id, name }) => (
 					<div key={id}>
@@ -27,7 +27,7 @@ export default function CollectionMultiSelection({
 							checked={selectedCollectionIds.has(id)}
 							onCheckedChange={() => toggleSelectedCollection(id)}
 						/>
-						<label>{name}</label>
+						<label className='ml-1'>{name}</label>
 					</div>
 				))}
 			</ScrollArea>

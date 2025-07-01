@@ -45,7 +45,7 @@ export default function ChatPage() {
 
 	return (
 		<div className='flex'>
-			<div className='flex flex-col w-2/10 items-center py-8 px-10 gap-y-6'>
+			<div className='flex flex-col w-2/10 items-center py-8 px-10 gap-y-5'>
 				<CollectionMultiSelection
 					selectedCollectionIds={selectedCollectionIds}
 					toggleSelectedCollection={toggleSelectedCollection}

@@ -32,7 +32,8 @@ def load_model():
         generator.begin_stream_ex(input_ids, gen_settings)
         for _ in range(max_new_tokens):
             out = generator.stream_ex()
-            if out['eos']: break
+            if out['eos']: 
+                break
             yield out['chunk']
 
     return generate
