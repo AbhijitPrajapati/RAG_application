@@ -15,30 +15,33 @@ import type { Config } from '@/types';
 
 interface ConfigDrawerProps {
 	config: Config;
-	updateConfig: <K extends keyof Config>(key: K, value: Config[K]) => void;
-	resetConfig: () => void;
+	setConfig: React.Dispatch<React.SetStateAction<Config>>;
+	defaultConfig: Config;
 }
 
 export default function ConfigDrawer({
 	config,
-	updateConfig,
-	resetConfig,
+	setConfig,
+	defaultConfig,
 }: ConfigDrawerProps) {
-	const { n_chunks, max_tokens, temperature } = config;
-
 	const curriedUpdaters: Record<string, (value: number) => void> = useMemo(
 		() =>
 			Object.keys(config).reduce(
 				(acc, key) => {
 					acc[key] = (value: number) => {
-						updateConfig(key as keyof Config, value);
+						setConfig((prev: Config) => ({
+							...prev,
+							[key]: value,
+						}));
 					};
 					return acc;
 				},
 				{} as Record<string, (value: number) => void>
 			),
-		[config, updateConfig]
+		[config, setConfig]
 	);
+
+	const { n_chunks, max_tokens, temperature } = config;
 
 	return (
 		<Drawer>
@@ -62,6 +65,7 @@ export default function ConfigDrawer({
 						label='N Chunks'
 						value={n_chunks}
 						setValue={curriedUpdaters.n_chunks}
+						defaultValue={defaultConfig.n_chunks}
 					/>
 					<ConfigSlider
 						min={64}
@@ -70,6 +74,7 @@ export default function ConfigDrawer({
 						label='Max Tokens'
 						value={max_tokens}
 						setValue={curriedUpdaters.max_tokens}
+						defaultValue={defaultConfig.max_tokens}
 					/>
 					<ConfigSlider
 						min={0}
@@ -78,6 +83,7 @@ export default function ConfigDrawer({
 						label='Temperature'
 						value={temperature}
 						setValue={curriedUpdaters.temperature}
+						defaultValue={defaultConfig.temperature}
 					/>
 				</div>
 				<DrawerFooter className='flex flex-row mx-auto p-6 gap-x-4 w-3xs'>
@@ -86,7 +92,10 @@ export default function ConfigDrawer({
 							Cancel
 						</Button>
 					</DrawerClose>
-					<Button onClick={resetConfig} className='w-1/2'>
+					<Button
+						onClick={() => setConfig(defaultConfig)}
+						className='w-1/2'
+					>
 						Reset
 					</Button>
 				</DrawerFooter>

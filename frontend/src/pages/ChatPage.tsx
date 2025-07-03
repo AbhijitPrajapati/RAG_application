@@ -19,12 +19,6 @@ export default function ChatPage() {
 	};
 	const [config, setConfig] = useState<Config>(defaultConfig);
 
-	const updateConfig = <K extends keyof Config>(key: K, value: Config[K]) => {
-		setConfig((prev) => ({ ...prev, [key]: value }));
-	};
-
-	const resetConfig = () => setConfig(defaultConfig);
-
 	const [selectedCollectionIds, setSelectedCollectionIds] = useState<
 		Set<number>
 	>(new Set());
@@ -70,8 +64,8 @@ export default function ChatPage() {
 				</Button>
 				<ConfigDrawer
 					config={config}
-					updateConfig={updateConfig}
-					resetConfig={resetConfig}
+					setConfig={setConfig}
+					defaultConfig={defaultConfig}
 				/>
 				<Button
 					onClick={() => setMessages([])}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { RotateCcw } from 'lucide-react';
 
 interface ConfigSliderProps {
 	min: number;
@@ -10,6 +11,7 @@ interface ConfigSliderProps {
 	label: string;
 	value: number;
 	setValue: (val: number) => void;
+	defaultValue: number;
 }
 
 export default function ConfigSlider({
@@ -19,6 +21,7 @@ export default function ConfigSlider({
 	label,
 	value,
 	setValue,
+	defaultValue,
 }: ConfigSliderProps) {
 	return (
 		<div className='p-3.5'>
@@ -48,6 +51,11 @@ export default function ConfigSlider({
 					max={max}
 					onChange={(e) => setValue(e.target.valueAsNumber)}
 					className='w-24 align-right'
+				/>
+				<RotateCcw
+					onClick={() => setValue(defaultValue)}
+					size='20'
+					className='text-foreground/40'
 				/>
 			</div>
 		</div>
