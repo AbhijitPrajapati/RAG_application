@@ -26,7 +26,7 @@ def files(sql_db, collection_id):
     return collection.files
 
 def add_documents(chroma_db, sql_db, embedding_model, texts, filenames, collection_id, chunk_similarity_threshold=0.55, chunk_overlap_sentences=1):
-    chunks, metadata, file_ids = [], [], []
+    chunks, metadata, return_files = [], [], []
     
     for text, filename in zip(texts, filenames):
         c = chunk_document(text, embedding_model, chunk_similarity_threshold, chunk_overlap_sentences)
@@ -35,7 +35,14 @@ def add_documents(chroma_db, sql_db, embedding_model, texts, filenames, collecti
         sql_db.add(file)
         sql_db.flush()
 
-        file_ids.append(file.id)
+        return_file = {
+            'id': file.id,
+            'name': filename,
+            'length': file.length,
+            'number_chunks': file.number_chunks,
+            'uploaded_at': file.uploaded_at
+        }
+        return_files.append(return_file)
 
         chunks.extend(c)
         for chunk in c: 
@@ -48,7 +55,7 @@ def add_documents(chroma_db, sql_db, embedding_model, texts, filenames, collecti
 
     sql_db.commit()
 
-    return file_ids
+    return return_files
 
 def delete_documents(chroma_db, sql_db, file_ids):
     chunks = chroma_db.get(where={'file_id': 

@@ -90,6 +90,7 @@ export function DataTable<T extends DataTableType>({
 									data-state={
 										row.getIsSelected() && 'selected'
 									}
+									className='h-16'
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>

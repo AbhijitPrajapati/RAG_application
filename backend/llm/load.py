@@ -9,7 +9,7 @@ def load_model():
     '''
     Loads exllamaV2 model and returns streaming generation function
     '''
-    model_dir = 'model/mistral'
+    model_dir = 'llm/mistral'
     config = ExLlamaV2Config(model_dir)
     config.arch_compat_overrides()
     model = ExLlamaV2(config)

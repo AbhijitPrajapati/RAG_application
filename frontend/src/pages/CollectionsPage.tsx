@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { columns } from '@/features/collections/CollectionsTableColumns';
-import { DataTable } from '@/components/DataTable';
+import { DataTable } from '@/components/datatable/DataTable';
 import {
 	useCollections,
 	useCreateCollection,

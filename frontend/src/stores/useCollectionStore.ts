@@ -6,7 +6,7 @@ import {
 	bulkDeleteCollections,
 	createCollection,
 	renameCollection,
-} from '@/services';
+} from '@/services/collections';
 
 interface CollectionsState {
 	collections: Collection[];
@@ -26,19 +26,34 @@ const useCollectionStore = create<CollectionsState>((set, get) => ({
 	},
 	deleteCollection: async (id: number) => {
 		await deleteCollection(id);
-		get().fetchCollections();
+		set({ collections: get().collections.filter((c) => c.id !== id) });
 	},
 	deleteCollections: async (ids: Array<number>) => {
 		await bulkDeleteCollections(ids);
-		get().fetchCollections();
+		set({
+			collections: get().collections.filter((c) => !ids.includes(c.id)),
+		});
 	},
 	createCollection: async (name: string) => {
-		await createCollection(name);
-		get().fetchCollections();
+		const res = await createCollection(name);
+		const newCollection = {
+			id: res.collection_id,
+			name: name,
+			created_at: res.created_at,
+			last_modified: res.created_at,
+			number_files: 0,
+		};
+		set({
+			collections: [...get().collections, newCollection],
+		});
 	},
 	renameCollection: async (collection_id: number, name: string) => {
 		await renameCollection(collection_id, name);
-		get().fetchCollections();
+		set({
+			collections: get().collections.map((c) =>
+				c.id === collection_id ? { ...c, name: name } : c
+			),
+		});
 	},
 }));
 

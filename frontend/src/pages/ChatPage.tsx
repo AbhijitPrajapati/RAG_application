@@ -45,12 +45,16 @@ export default function ChatPage() {
 
 	return (
 		<div className='flex'>
-			<div className='flex flex-col basis-1/5 items-center py-8 px-10 gap-y-6'>
+			<div className='flex flex-col basis-1/5 items-center py-8 px-12 gap-y-8'>
 				<CollectionMultiSelection
 					selectedCollectionIds={selectedCollectionIds}
 					toggleSelectedCollection={toggleSelectedCollection}
 				/>
-				<Button className='w-full' onClick={() => setOpenUpload(true)}>
+				<Button
+					className='w-full'
+					onClick={() => setOpenUpload(true)}
+					variant='secondary'
+				>
 					Upload
 				</Button>
 				<UploadDialog
@@ -60,6 +64,7 @@ export default function ChatPage() {
 				<Button
 					className='w-full'
 					onClick={() => navigate('/collections')}
+					variant='secondary'
 				>
 					Manage Collections
 				</Button>
@@ -70,7 +75,8 @@ export default function ChatPage() {
 				/>
 				<Button
 					onClick={() => setMessages([])}
-					className='w-full hover:bg-destructive/50 duration-300'
+					className='w-full hover:bg-destructive/50 hover:text-destructive-foreground duration-300'
+					variant='secondary'
 				>
 					Clear Chat
 				</Button>

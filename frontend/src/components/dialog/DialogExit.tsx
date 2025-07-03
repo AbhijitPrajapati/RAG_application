@@ -8,7 +8,7 @@ export default function DialogExit() {
 		<DialogClose asChild>
 			<Button
 				variant='ghost'
-				className='absolute right-4 top-4 p-2 rounded-full'
+				className='absolute right-4 top-4 rounded-full'
 			>
 				<X className='h-4 w-4' />
 			</Button>

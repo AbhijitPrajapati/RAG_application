@@ -4,8 +4,8 @@ import type { ColumnDef } from '@tanstack/react-table';
 import type { Collection } from '@/types';
 
 import { CollectionsTableDropdown } from './CollectionsTableDropdown';
-import SortableDataTableHeader from '@/components/SortableDataTableHeader';
-import { selectColumn } from '@/components/DataTableSelectColumn';
+import SortableDataTableHeader from '@/components/datatable/SortableDataTableHeader';
+import { selectColumn } from '@/components/datatable/DataTableSelectColumn';
 
 export const columns: ColumnDef<Collection>[] = [
 	selectColumn as ColumnDef<Collection>,

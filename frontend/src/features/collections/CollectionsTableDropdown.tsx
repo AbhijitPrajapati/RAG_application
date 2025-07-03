@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Collection } from '@/types';
-import { ConfirmationDialog } from '@/components/ConfimationDialog';
+import { ConfirmationDialog } from '@/components/dialog/ConfimationDialog';
 import NameDialog from './NameDialog';
 import UploadDialog from '@/features/files/UploadDialog';
 interface CollectionsTableDropdownProps {

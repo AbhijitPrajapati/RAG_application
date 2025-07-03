@@ -44,6 +44,7 @@ class CollectionCreationRequest(BaseModel):
 
 class CollectionCreationResponse(BaseModel):
     collection_id: int
+    created_at: datetime
 
 class CollectionRenameRequest(BaseModel):
     new_name: str
@@ -52,7 +53,14 @@ class CollectionBulkDeletionRequest(BaseModel):
     collection_ids: list[int]
 
 class UploadFilesResponse(BaseModel):
-    files_ids: list[int]
+    class File(BaseModel):
+        id: int
+        name: str
+        length: int
+        number_chunks: int
+
+    files: list[File]
+
 
 class FileBulkDeletionRequest(BaseModel):
     file_ids: list[int]

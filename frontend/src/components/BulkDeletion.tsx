@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import { ConfirmationDialog } from '@/components/ConfimationDialog';
+import { ConfirmationDialog } from '@/components/dialog/ConfimationDialog';
 import { Button } from '@/components/ui/button';
 import type { File, Collection } from '@/types';
 interface FileBulkDeletionProps<T extends Collection | File> {
@@ -37,6 +37,7 @@ export default function FileBulkDeletion<T extends Collection | File>({
 			<Button
 				disabled={deletion_items.length == 0}
 				onClick={() => setDeleteDialogOpen(true)}
+				variant='secondary'
 			>
 				Delete
 			</Button>

@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ConfirmationDialog } from '@/components/ConfimationDialog';
-import { useDeleteFile, useFetchFiles } from '@/stores/useFilesStore';
+import { ConfirmationDialog } from '@/components/dialog/ConfimationDialog';
+import { useDeleteFile } from '@/stores/useFilesStore';
 import { toast } from 'sonner';
 import ViewFileDialog from '@/features/files/ViewFileDialog';
 
@@ -21,12 +21,10 @@ export default function FilesTableDropdown({ file }: FilesTableDropdownProps) {
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [viewDialogOpen, setViewDialogOpen] = useState(false);
 	const deleteFile = useDeleteFile();
-	const fetchFiles = useFetchFiles();
 
 	const delete_fn = async () => {
 		try {
 			deleteFile(file.id);
-			fetchFiles(file.collection_id);
 			toast.success(`Deleted ${file.name}`);
 		} catch (err) {
 			if (err instanceof Error) {

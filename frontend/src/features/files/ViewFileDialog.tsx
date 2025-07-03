@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dialog';
 import type { File } from '@/types';
 import { useGetFile } from '@/stores/useFilesStore';
-import DialogExit from '@/components/DialogExit';
+import DialogExit from '@/components/dialog/DialogExit';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ViewFileDialogProps {

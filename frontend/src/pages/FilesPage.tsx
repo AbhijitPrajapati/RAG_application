@@ -8,7 +8,7 @@ import {
 import type { File } from '@/types';
 import { type Table } from '@tanstack/react-table';
 import { columns } from '@/features/files/FileTableColumns';
-import { DataTable } from '@/components/DataTable';
+import { DataTable } from '@/components/datatable/DataTable';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import UploadDialog from '@/features/files/UploadDialog';
@@ -70,10 +70,7 @@ export default function FilesPage() {
 								.includes(f.id)
 						)}
 						item_type='files'
-						deletion_func={(ids: Array<number>) => {
-							deleteFiles(ids);
-							fetchFiles(collectionId);
-						}}
+						deletion_func={deleteFiles}
 					/>
 				</>
 			)}

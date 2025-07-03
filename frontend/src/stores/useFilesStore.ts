@@ -6,7 +6,7 @@ import {
 	uploadFiles,
 	bulkDeleteFiles,
 	getDocument,
-} from '@/services';
+} from '@/services/files';
 
 interface FilesState {
 	files: CustomFile[];
@@ -17,7 +17,7 @@ interface FilesState {
 	getFile: (file_id: number) => Promise<string>;
 }
 
-const useFilesStore = create<FilesState>((set) => ({
+const useFilesStore = create<FilesState>((set, get) => ({
 	files: [],
 	fetchFiles: async (collection_id: number) => {
 		const data = await getFiles(collection_id);
@@ -25,12 +25,19 @@ const useFilesStore = create<FilesState>((set) => ({
 	},
 	deleteFile: async (file_id: number) => {
 		await deleteFile(file_id);
+		set({ files: get().files.filter((f) => f.id !== file_id) });
 	},
 	deleteFiles: async (file_ids: Array<number>) => {
 		await bulkDeleteFiles(file_ids);
+		set({ files: get().files.filter((f) => !file_ids.includes(f.id)) });
 	},
 	uploadFiles: async (collection_id: number, files: Array<File>) => {
-		await uploadFiles(files, collection_id);
+		const res = await uploadFiles(files, collection_id);
+		const newFiles = res.files.map(({ ...file }) => ({
+			...file,
+			collection_id,
+		}));
+		set({ files: [...get().files, ...newFiles] });
 	},
 	getFile: async (file_id: number) => {
 		const content = await getDocument(file_id);

@@ -8,7 +8,7 @@ files_router = APIRouter()
 @files_router.post('/collections/{collection_id}/files', response_model=UploadFilesResponse, status_code=status.HTTP_201_CREATED)
 async def upload_files(request: Request, collection_id: int, files: list[UploadFile] = File(...), sql_db = Depends(get_db)):
     names, contents = await read_files(files)
-    return UploadFilesResponse(files_ids=add_documents(request.app.state.chroma, sql_db, request.app.state.embedding_model, contents, names, collection_id))
+    return UploadFilesResponse(files=add_documents(request.app.state.chroma, sql_db, request.app.state.embedding_model, contents, names, collection_id))
 
 @files_router.get('/collections/{collection_id}/files', response_model=list[FileResponse])
 async def get_files(collection_id: int, sql_db = Depends(get_db)):

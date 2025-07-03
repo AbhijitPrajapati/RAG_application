@@ -2,10 +2,10 @@ import React from 'react';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type { File } from '@/types';
-import SortableDataTableHeader from '@/components/SortableDataTableHeader';
+import SortableDataTableHeader from '@/components/datatable/SortableDataTableHeader';
 
 import FilesTableDropdown from '@/features/files/FilesTableDropdown';
-import { selectColumn } from '@/components/DataTableSelectColumn';
+import { selectColumn } from '@/components/datatable/DataTableSelectColumn';
 
 export const columns: ColumnDef<File>[] = [
 	selectColumn as ColumnDef<File>,

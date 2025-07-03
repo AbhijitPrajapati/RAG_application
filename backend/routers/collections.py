@@ -22,7 +22,8 @@ async def delete_collections_bulk(req: CollectionBulkDeletionRequest, request: R
 
 @collections_router.post('/', response_model=CollectionCreationResponse, status_code=status.HTTP_201_CREATED)
 async def create_collection(req: CollectionCreationRequest, sql_db = Depends(get_db)):
-    return CollectionCreationResponse(collection_id=create(req.name, sql_db)) # type: ignore
+    cid, created_at = create(req.name, sql_db)
+    return CollectionCreationResponse(collection_id=cid, created_at=created_at) # type: ignore
 
 @collections_router.patch('/{collection_id}', status_code=status.HTTP_204_NO_CONTENT)
 async def rename_collection(collection_id: int, req: CollectionRenameRequest, sql_db = Depends(get_db)):

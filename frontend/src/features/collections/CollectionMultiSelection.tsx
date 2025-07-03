@@ -22,25 +22,25 @@ export default function CollectionMultiSelection({
 
 	return (
 		<>
-			<Label className='text-center text-md'>Collections</Label>
+			<Label className='text-center !text-base'>Collections</Label>
 			<ScrollArea className='w-full p-4 border-2 rounded-2xl [&>[data-radix-scroll-area-viewport]]:max-h-32 h-24'>
 				{collections.length > 0 ? (
 					collections.map(({ id, name }) => (
-						<div key={id}>
+						<div key={id} className='ml-2'>
 							<Checkbox
 								checked={selectedCollectionIds.has(id)}
 								onCheckedChange={() =>
 									toggleSelectedCollection(id)
 								}
 							/>
-							<label className='ml-1'>{name}</label>
+							<label className='ml-2'>{name}</label>
 						</div>
 					))
 				) : (
 					<div className='text-center'>
-						<p className='text-md'>No collections exist.</p>
+						<p>No collections exist.</p>
 						<span
-							className='text-md underline underline-offset-4 decoration-foreground/45 cursor-pointer'
+							className='underline underline-offset-4 decoration-foreground/45 cursor-pointer'
 							onClick={() => setCreationOpen(true)}
 						>
 							Create One

@@ -43,7 +43,9 @@ export default function ConfigDrawer({
 	return (
 		<Drawer>
 			<DrawerTrigger asChild>
-				<Button className='w-full'>Configurations</Button>
+				<Button className='w-full' variant='secondary'>
+					Configurations
+				</Button>
 			</DrawerTrigger>
 
 			<DrawerContent aria-describedby={undefined} className='p-3'>

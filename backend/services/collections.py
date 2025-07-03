@@ -21,7 +21,7 @@ def create(name, sql_db):
     sql_db.add(collection)
     sql_db.commit()
     sql_db.refresh(collection)
-    return collection.id
+    return collection.id, collection.created_at
 
 def rename(collection_id, name, sql_db):
     c = sql_db.query(Collection).filter(Collection.id == collection_id).first()

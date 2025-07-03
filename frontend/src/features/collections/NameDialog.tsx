@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCollections } from '@/stores/useCollectionStore';
-import DialogExit from '@/components/DialogExit';
+import DialogExit from '@/components/dialog/DialogExit';
 
 interface NameDialogProps {
 	onSubmit: (name: string) => void;
@@ -58,12 +58,13 @@ export default function NameDialog({
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 						setName(e.target.value);
 					}}
+					className='mx-auto'
 				/>
 
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button
-							className='mx-auto w-36'
+							className='mx-auto w-40'
 							onClick={() => {
 								onSubmit(name);
 								setName('');
