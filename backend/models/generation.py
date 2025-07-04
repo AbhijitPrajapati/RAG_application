@@ -9,7 +9,7 @@ def load_model():
     '''
     Loads exllamaV2 model and returns streaming generation function
     '''
-    model_dir = 'llm/mistral'
+    model_dir = 'models/resources/mistral'
     config = ExLlamaV2Config(model_dir)
     config.arch_compat_overrides()
     model = ExLlamaV2(config)
@@ -37,5 +37,3 @@ def load_model():
             yield out['chunk']
 
     return generate
-
-

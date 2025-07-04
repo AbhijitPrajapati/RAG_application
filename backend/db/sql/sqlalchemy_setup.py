@@ -1,13 +1,13 @@
 from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, event
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
-from data.sql.event_handlers import file_delete, file_insert, collection_rename
+from .event_handlers import file_delete, file_insert, collection_rename
 
 from datetime import datetime, timezone
 
 def time_now():
     return datetime.now(timezone.utc)
 
-engine = create_engine('sqlite:///data/sql/sql_store.db', echo=True)
+engine = create_engine('sqlite:///backend/db/sql/sql_store.db', echo=True)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 

@@ -1,4 +1,4 @@
-from data.sql.sqlalchemy_setup import Collection
+from backend.db.sql.sqlalchemy_setup import Collection
 
 def get(sql_db):
     return sql_db.query(Collection).all()

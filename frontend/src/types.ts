@@ -24,6 +24,7 @@ export interface Config {
 	n_chunks: number;
 	max_tokens: number;
 	temperature: number;
+	top_n_chunks: number;
 }
 
 export type DataTableType = Collection | File;

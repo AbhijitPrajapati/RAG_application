@@ -6,22 +6,24 @@ import CollectionMultiSelection from '@/features/collections/CollectionMultiSele
 import ConfigDrawer from '@/features/config/ConfigDrawer';
 
 import { Button } from '@/components/ui/button';
-import type { Message, Config } from '@/types';
 import UploadDialog from '@/features/files/UploadDialog';
+import useSelectedCollectionIds from '@/features/collections/useSelectedCollectionIds';
+import useConfig from '@/features/config/useConfig';
+import useMessages from '@/features/chat/useMessages';
 
 export default function ChatPage() {
-	const [messages, setMessages] = useState<Message[]>([]);
-
 	const defaultConfig = {
-		n_chunks: 4,
+		n_chunks: 50,
 		max_tokens: 512,
 		temperature: 0.7,
+		top_n_chunks: 5,
 	};
-	const [config, setConfig] = useState<Config>(defaultConfig);
+	const [config, setConfig] = useConfig(defaultConfig);
 
-	const [selectedCollectionIds, setSelectedCollectionIds] = useState<
-		Set<number>
-	>(new Set());
+	const [messages, setMessages] = useMessages();
+
+	const [selectedCollectionIds, setSelectedCollectionIds] =
+		useSelectedCollectionIds();
 
 	const toggleSelectedCollection = (id: number) => {
 		const newSet = new Set(selectedCollectionIds);

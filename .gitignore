@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 __pycache__
 
-backend/llm/mistral/
+backend/models/resources

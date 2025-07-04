@@ -1,6 +1,6 @@
 
-from chunking.semantic_chunking import chunk_document
-from data.sql.sqlalchemy_setup import Collection, File
+from .semantic_chunking import chunk_document
+from backend.db.sql.sqlalchemy_setup import Collection, File
 
 # seperate read_files when more file types come
 
