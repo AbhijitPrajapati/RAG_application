@@ -49,7 +49,6 @@ export default function ChatPage() {
 				<Button
 					className='w-full'
 					onClick={() => setOpenUpload(true)}
-					variant='secondary'
 				>
 					Upload
 				</Button>
