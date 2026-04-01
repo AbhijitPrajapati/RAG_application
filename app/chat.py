@@ -6,14 +6,14 @@ def chat(
     top_p=0.95,
     top_k=40,
 ):
-    messages = [
-        {
-            "role": "system",
-            "content": "You are a helpful assistant. Respond to the user's prompt using ONLY the context given and NO external knowlege. You may utilize previous messages from either the user or yourself.",
-        },
-    ]
-
     while True:
+        messages = [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant. Respond to the user's prompt using ONLY the context given and NO external knowlege. You may utilize previous messages from either the user or yourself.",
+            },
+        ]
+
         prompt = input("\nUser: ")
         if prompt == "/e":
             break
@@ -44,4 +44,3 @@ def chat(
             print(token, end="", flush=True)
             response += token
         print("\n")
-        messages.append({"role": "assistant", "content": response})

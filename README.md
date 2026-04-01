@@ -1,5 +1,5 @@
 # rag_application
-This simple command-line tool enables RAG (retrieval augmented generation) leveraging local CUDA acceleration for private, customizable inference. It accepts plain text documents and allows flexibility in model choice to meet hardware constraints. Additionally, it employs numerous methods including semantic chunking and reranking in order to improve the effectiveness of the local RAG pipeline. The tool allows multi-turn conversation as well, taking advantage of enhanced reasoning capabilities. 
+This simple command-line tool enables RAG (retrieval augmented generation) leveraging local CUDA acceleration for private, customizable inference. It accepts plain text documents and allows flexibility in model choice to meet hardware constraints. Additionally, it employs numerous methods including semantic chunking and reranking in order to improve the effectiveness of the local RAG pipeline.
 
 ## Requirements
 ### Hardware
