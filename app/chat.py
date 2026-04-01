@@ -6,6 +6,9 @@ def chat(
     top_p=0.95,
     top_k=40,
 ):
+    from models import call_llm
+    from services import query_documents
+
     while True:
         messages = [
             {
@@ -17,9 +20,6 @@ def chat(
         prompt = input("\nUser: ")
         if prompt == "/e":
             break
-
-        from models import call_llm
-        from services import query_documents
 
         chunks = query_documents(prompt, n_chunks, top_n)
         assert chunks is not None

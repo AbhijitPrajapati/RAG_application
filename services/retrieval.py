@@ -11,8 +11,6 @@ def query_documents(query, n_chunks, top_n):
     from storage.chroma import query_chunks
     from models.cross_encoder import rerank
 
-    with get_db() as db:
-        document_ids = [d.id for d in get_documents(db)]
-    chunks = query_chunks(query, document_ids, n_chunks)
+    chunks = query_chunks(query, n_chunks)
     assert chunks is not None
     return rerank(query, chunks[0], top_n)

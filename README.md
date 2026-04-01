@@ -46,6 +46,7 @@ pip install -r requirements.txt
 ~~~
 python main.py chat
 ~~~
+`/e` to quit
 ### Adding Documents
 ~~~
 python main.py documents ingest <file or folder paths>

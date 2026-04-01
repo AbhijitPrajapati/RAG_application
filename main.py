@@ -7,11 +7,9 @@ match args[0]:
     case "chat":
         from app.chat import chat
 
-        with open("active_collections.json", "r") as f:
-            cids = json.load(f)["active_collections"]
         with open("rag_config.json", "r") as f:
             rag_config = json.load(f)
-        chat(cids, **rag_config)
+        chat(**rag_config)
 
     case "documents":
         match args[1]:
